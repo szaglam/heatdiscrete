@@ -1,0 +1,41 @@
+% !TeX root = heatdiscrete.tex
+\section{Discussion}
+\label{sec:discussion}
+We showed that for a symmetric matrix 
+$S\colon\Omega\times\Omega\to\realspos$ and 
+unit vectors $u,v\colon\Omega\to\realspos$, defining
+$m_t = \iprod{v}{S^tu}$ for $t=0,1,\ldots$, we have 
+\begin{align}
+m_{t+2}    &\ge m_t^{1+2/t}, \text{ and}\label{eq:dbd66}\\
+m_{t+2}    &\ge m_t^{1+2/t}\cdot \min\set{t^{1-\eps}, 
+\ceil{\delta\frac{m_t^{1-2/t}}{m_{t-2}}}} \label{eq:dconv}
+\end{align}
+and argued that \autoref{eq:dconv} and \eqref{eq:dbd66}, 
+in this order, are best viewed as gradual weakenings of
+the log-convexity of $\set{m_t}_{t=0}^\infty$.
+We conjecture that a similar principle holds
+true for continuous time Markov chains as well.
+
+Call a function $f\colon\realspos\to[0,1]$,
+whose logarithm is continuously twice differentiable 
+(i.e., $\log f\in C^2(\realspos)$), {\em nearly-log-convex} 
+if $x^2 (\log f)''(x)\ge 2 \log f(x)$ for $x\in\realspos$. 
+Note that $\log f \le 0$, therefore this is a weakening
+of the usual log-convexity definition, which requires 
+$(\log f)''\ge 0$.
+
+\begin{conjecture}
+\label{conj:continuouslogconv}
+Let $S\colon\Omega\times\Omega\to\realspos$
+be a symmetric substochastic matrix and $u,v\colon\Omega\to\realspos$
+be unit vectors. The function
+\begin{align*}
+t\mapsto \iprod{v}{e^{t(S-I)}u}
+\end{align*}
+is nearly-log-convex.
+\end{conjecture}
+By an argument similar to the proof of \autoref{thm:klogk}, one can 
+show the following.
+\begin{theorem}
+\autoref{conj:continuouslogconv} implies \autoref{conj:ghd}.
+\end{theorem}

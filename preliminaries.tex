@@ -1,0 +1,184 @@
+% !TeX root = heatdiscrete.tex
+\section{Preliminaries}
+\label{sec:preliminaries}
+
+We denote by $[n]$ the set $\set{1,2,\ldots,n}$. We
+take $\exp$ and $\log$ functions to the base 2.
+Let $\Omega$ be a countable set. 
+For a function $\mu\colon\Omega\to\realspos$ and a set 
+$\Psi\subseteq\Omega$, we use the shorthand
+\begin{align*}
+\mu(\Psi) \defeq \sum_{x\in\Psi}\mu(x).
+\end{align*}
+A function $\mu\colon\Omega\to\realspos$
+is said to be a distribution on $\Omega$ if
+$\mu(\Omega) = 1$ and a subdistribution
+if $\mu(\Omega) \le 1$. For a function
+$\mu$ on $\Omega$, we define
+\begin{align*}
+\supp(\mu)\defeq \setbuilder{x\in \Omega}{\mu(x)>0}.
+\end{align*}
+For two distributions $\mu\colon\Omega_1\to\realspos$
+and $\nu\colon\Omega_2\to\realspos$, let us denote by
+$\mu\nu$ the distribution on $\Omega_1\times\Omega_2$
+given by $(\mu\nu)(x_1,x_2) = \mu(x_1)\nu(x_2)$.
+
+For a discrete random variable $X$, we denote by
+$\dist(X)$ the distribution function of $X$ and
+we define $\supp(X)\defeq\supp(\dist(X))$. 
+If $X$ is so that $\dist(X)\colon\Omega\to\realspos$,
+then we say that $X$ has sample space $\Omega$.
+Two 
+random variables $X$ and $Y$ are said to be 
+independent if $\dist(XY) =\dist(X)\dist(Y)$.
+
+\begin{lemma}[Jensen \cite{Jensen1906}, Formula (5)]
+\label{lem:jensen}
+Let $X$ be a real-valued random variable and
+$f$ be a convex function. We have
+$\E\sparen{f(X)} \ge f(\E[X])$. When
+$f$ is strictly convex, the inequality holds
+with equality if and only if $X$ is constant
+with probability 1.
+\end{lemma}
+
+\subsection{Information theory}
+\label{sec:info}
+In this section we review the definitions and 
+facts we use from information theory.
+Let $\mu$ and $\nu$ be two 
+nonnegative functions on $\Omega$.
+The Kullback-Leibler divergence \cite{Wald1945, KullbackL1951}
+of $\mu$ from $\nu$,
+denoted $\kldiv{\mu}{\nu}$, is defined by
+%
+\begin{align}
+\label{eq:kldiv}
+  \kldiv{\mu}{\nu} \defeq \sum_{x\in \Omega}
+      \mu(x)\log\frac{\mu(x)}{\nu(x)}\,.
+\end{align}
+%
+Here, if $\mu(x)=0$ for some $x$, then its contribution
+to the summation is taken as 0, even when $\nu(x)=0$.
+The divergence is undefined if there is an
+$x\in \Omega$ such that $\mu(x)>0$ and
+$\nu(x)=0$.
+It can be shown that if the related series 
+converges for the right hand side of \autoref{eq:kldiv},
+it converges absolutely, 
+which justifies leaving the summation order unspecified.
+A fundamental property of 
+$\kldiv{\cdot}{\cdot}$ is that
+the divergence of a distribution from a subdistribution 
+is always nonnegative.
+\begin{lemma}[Gibbs \cite{Gibbs1902}, Theorem VIII]
+\label{lem:gibbs}
+Let $\mu,\nu\colon\Omega\to\reals$ be such that $\mu$ is a
+distribution and $\nu$ is a subdistribution.
+We have $\kldiv{\mu}{\nu}\ge 0$ with equality if and
+only if $\mu=\nu$.
+\end{lemma}
+\begin{lemma}[Kullback and Leibler \cite{KullbackL1951},
+Lemma 3.2]
+\label{lem:klcond}
+Let $\mu,\nu\colon\Omega\to\realspos$ be so that
+$\mu$ is a distribution on $\Omega$ and 
+$\supp(\mu) = \Psi\subseteq\Omega$. We have
+\begin{align*}
+\kldiv{\mu}{\nu}\ge -\log \nu(\Psi)
+\end{align*}
+with equality if and only if $\mu(x) = \nu(x)/\nu(\Psi)$ for
+$x\in\Psi$ and $\mu(x) = 0$ for $x\notin\Psi$.
+\end{lemma}
+\begin{proof}
+By \autoref{eq:kldiv} we write
+\begin{align*}
+\kldiv{\mu}{\nu} &= -\sum_{x\in \Psi}
+    \mu(x)\log\frac{\nu(x)}{\mu(x)}
+  \ge -\log\sum_{x\in \Psi}\nu(x) =-\log \nu(\Psi)\,,
+\end{align*}
+where the inequality follows from
+\autoref{lem:jensen} and concavity of
+$z\mapsto\log z$ on $\realspos$. 
+If $\mu(x) = \nu(x)/\nu(\Psi)$ for $x\in\Psi$, we have 
+$\kldiv{\mu}{\nu}=-\log \nu(\Psi)$ by direct computation.
+Otherwise $\kldiv{\mu}{\nu}>-\log\nu(\Psi)$ by strict 
+concavity of $z\mapsto\log z$.
+\end{proof}
+
+We extend the divergence notation
+$\kldiv{\cdot}{\cdot}$ to apply to random
+variables as follows. Let $X,Y$ be discrete random
+variables on the same sample space $\Omega$. Define
+\begin{align}
+\label{eq:klrv}
+\kldiv{X}{Y}\defeq \kldiv{\dist(X)}{\dist(Y)}.
+\end{align}
+%
+With this notation in hand, we are ready to define the 
+conditional divergence. Let $X_1X_2$ and $Y_1Y_2$ be 
+random variables defined on the sample space $\Omega_1\times \Omega_2$.
+The divergence of $X_1\emid X_2$ from $Y_1\emid Y_2$ is
+defined by 
+\begin{align}
+\kldiv{X_1\emid X_2}{Y_1\emid Y_2}
+    \defeq \E_{x_2\sim X_2}
+        \kldiv{X_1\emid X_2=x_2}{Y_1\emid Y_2 = x_2}.
+\end{align}
+Here, for each $x_2\in\supp(X_2)$, 
+$X_1\emid X_2=x_2$ and $Y_1\emid Y_2 = x_2$ 
+are random variables on the sample space
+$\Omega_1$ obtained from, respectively
+$X_1X_2$ and $Y_1Y_2$, by conditioning on the
+second coordinate equaling $x_2$.
+
+\begin{lemma}[e.g., \cite{CoverT2006}]
+\label{lem:klchain}
+Let $X_1X_2$ and $Y_1Y_2$ be random variables, both on the
+sample space $\Omega_1\times \Omega_2$. We have
+\begin{align*}
+\kldiv{X_1X_2}{Y_1Y_2} = 
+    \kldiv{X_1}{Y_1} + \kldiv{X_2\emid X_1}{Y_2\emid Y_1}.
+\end{align*}
+\end{lemma}
+\iffalse
+\begin{proof}
+Let $\mu,\nu\colon\Omega_1\times \Omega_2\to \realspos$
+be the distributions of respectively $X_1X_2$ and $Y_1Y_2$.
+Using the shorthands
+$\mu(\Omega_1,x_2)\defeq\sum_{x_1\in\Omega_1}\mu(x_1,x_2)$
+and 
+$\nu(\Omega_1,x_2)\defeq\sum_{x_1\in\Omega_1}\nu(x_1,x_2)$,
+we write
+\begin{align*}
+  \kldiv{X_1\emid X_2}{Y_1\emid Y_2} &=
+     \sum_{x_2\in\Omega_2}\mu(\Omega_1,x_2)
+       \sum_{x_1\in\Omega_1}\frac{\mu(x_1,x_2)}
+           {\mu(\Omega_1,x_2)}
+       \log\frac{\mu(x_1,x_2)\nu(\Omega_1,x_2)}
+                {\nu(x_1,x_2)\mu(\Omega_1,x_2)}\\
+  &= \sum_{x_1,x_2}\mu(x_1,x_2)
+       \log\frac{\mu(x_1,x_2)}{\nu(x_1,x_2)} +
+     \sum_{x_2}
+       \mu(\Omega_1,x_2)\log\frac{\nu(\Omega_1,x_2)}
+           {\mu(\Omega_1,x_2)}\\
+\intertext{by splitting the terms inside the logarithm. 
+Using \autoref{eq:kldiv} together with \autoref{eq:klrv}
+ we conclude}
+  &= \kldiv{X_1X_2}{Y_1Y_2} - \kldiv{X_2}{Y_2}.
+\end{align*}
+Rearranging, we obtain the statement of the lemma.
+\end{proof}
+\fi
+\paragraph{The mutual information}
+Let $X$ and $Y$ be jointly distributed random variables.
+The 
+mutual information of $X$ and $Y$, 
+denoted $\muti{X}{Y}$, is defined as
+\begin{align}
+\muti{X}{Y} \defeq \kldiv{\dist(X,Y)}{\dist(X)\dist(Y)}.
+\label{eq:muti-def}
+\end{align}
+The mutual information of a random variable 
+with itself, i.e., the quantity $\muti{X}{X}$ is 
+called the Shannon entropy of $X$.

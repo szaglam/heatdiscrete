@@ -1,0 +1,54 @@
+% !TeX root = heatdiscrete.tex
+\renewenvironment{abstract}{\small \list{}{%
+    \setlength{\leftmargin}{5mm}%
+    \setlength{\rightmargin}{\leftmargin}%
+    \listparindent 0em%
+  }\item\relax{\bf Abstract.}}{\endlist}
+
+\begin{abstract}
+Let $u,v \in \reals^\Omega_+$ be positive
+unit vectors and
+$S\in\reals^{\Omega\times\Omega}_+$ be a
+symmetric substochastic matrix.
+For an integer $t\ge 0$, let 
+$m_t = \smash{\iprod{v}{S^tu}}$, which
+we view as the
+heat measured by $v$ after an initial heat
+configuration $u$ is let to diffuse for $t$
+time steps according to $S$. 
+Since $S$ is entropy improving,
+one may intuit that $m_t$ should not change too
+rapidly over time. We give the following formalizations
+of this intuition.
+
+We prove that
+$m_{t+2} \ge m_t^{1+2/t}\!,$ an inequality
+studied earlier by Blakley and Dixon 
+(also Erdős and Simonovits) for $u=v$
+and shown true under the restriction $m_t\ge e^{-4t}$.
+Moreover we prove that for any $\eps>0$, 
+a stronger inequality 
+$m_{t+2} \ge t^{1-\eps}\cdot \smash{m_t^{1+2/t}}$
+holds unless
+$m_{t+2}m_{t-2}\ge \delta m_t^2$
+for some $\delta$ that depends on $\eps$ only.
+Phrased differently, $\forall \eps> 0, 
+\exists \delta> 0$ such that $\forall S,u,v$
+\begin{equation*}
+\frac{m_{t+2}}{m_{t}^{1+2/t}}\ge
+\min\set{t^{1-\eps}, \delta\frac{m_t^{1-2/t}}{m_{t-2}}},
+\quad \forall t \ge 2,
+\end{equation*}
+which can be viewed as a truncated 
+log-convexity statement. 
+
+Using this inequality, we answer two related
+open questions in complexity theory: Any
+property tester for $k$-linearity requires
+$\Omega(k\log k)$ queries and the randomized
+communication complexity of the $k$-Hamming
+distance problem is $\Omega(k\log k)$.
+Further we show that any randomized parity
+decision tree computing $k$-Hamming weight has size
+$\exp\nparen{\Omega(k\log k)}$.
+\end{abstract}

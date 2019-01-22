@@ -1,0 +1,86 @@
+% !TEX TS-program = pdfLaTeX
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{lmodern}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{accents}
+\usepackage{microtype}
+\usepackage[hmargin=3.8cm,vmargin=2.5cm]{geometry}
+\usepackage[usenames]{xcolor}
+\usepackage{nicefrac}
+\usepackage{bbm}
+\definecolor{Blue}{RGB}{5, 55, 77}
+\definecolor{Red}{RGB}{20,50,10}
+\usepackage{pgfplots}
+\usepackage{authblk}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{float}
+\usepackage{aliascnt}
+\usepackage{multirow}
+\hypersetup{
+    colorlinks,
+    citecolor=Red,
+    filecolor=Blue,
+    linkcolor=Blue,
+    urlcolor=Blue,
+    breaklinks=false,
+}
+\usepackage{enumerate}
+\usepackage{mathtools}
+\usepackage{sectsty}
+\usepackage[anythingbreaks]{breakurl}
+
+\sectionfont{\large}
+\subsectionfont{\normalsize}
+
+\input{definitions/math}
+\input{definitions/fields}
+\input{definitions/probability}
+\input{definitions/entropy}
+\input{definitions/linearalgebra}
+\input{definitions/theoremlike}
+\input{definitions/communication}
+
+\input{definitions/citations}
+\addbibresource{references/main.bib}
+
+\input{definitions/arxiv}
+\arxivfalse
+
+
+\begin{document}
+\author{%
+  \vspace{-0.5em}\fontsize{10}{10}\selectfont Mert Sağlam%
+  \\\vspace{-0.5em}\fontsize{9}{9}\selectfont saglam@uw.edu}
+\title{\bf\fontsize{15}{19}\selectfont
+  Near log-convexity of measured heat in
+  (discrete) time and consequences}
+\date{}
+\maketitle
+\vspace{-25px}
+
+\input{abstract}
+\tableofcontents
+\newpage
+\input{introduction}
+\input{preliminaries}
+\input{monotonicity}
+\input{logconvex}
+\input{applications}
+\input{discussion}
+
+\section*{Acknowledgments}
+We are indebted to Paul Beame, 
+Shayan Oveis Gharan and Gábor Tardos for many valuable
+conversations and the anonymous reviewers for bringing 
+\autoref{conj:erdos-simonovits} to our attention and for
+many improvements to the presentation of the paper. 
+Many thanks to Suvrit Sra for bringing \cite{Pate2012} 
+to our attention on Mathoverflow \cite{Sra2016} and 
+its connections to Sidorenko's conjecture.
+\printbibliography
+
+\end{document}

@@ -1,0 +1,422 @@
+% !TeX root = heatdiscrete.tex
+\section{Near log-convexity of 
+         $t\mapsto m_{2t}$ and $t\mapsto m_{2t+1}$}
+\label{sec:logconvex}
+In this section we would like to prove the following
+improvement to \autoref{eq:absclaim1}: for all $\eps>0$ 
+there exists a $\delta>0$ such that
+\begin{align}
+m_{t+2}
+\ge m_{t}^{1+2/t}\cdot
+\min\set{t^{1-\eps}, \ceil{\delta\frac{m_t^{1-2/t}}{m_{t-2}}}},
+\quad \forall t \ge 2.
+\label{eq:logconv}
+\end{align}
+%
+Recall that in proving \autoref{eq:absclaim1}, 
+in line \ref{eq:mutrelax}, we used the relaxation 
+$\muti{J}{Z}\ge 0$.
+Note that $J$ is uniformly distributed on $[t]$
+therefore has $\log t$ bits of entropy and provided
+that it is possible to infer $J$ from $Z$ 
+(i.e., it is possibly to locate the time reversal we 
+have inserted in $Z$)
+the $\muti{J}{K}$ term appears to be large enough to 
+recover the factor
+\begin{align*}
+\min\set{t^{1-\eps}, 
+  \ceil{\delta\frac{m_t^{1-2/t}}{m_{t-2}}}}.
+\end{align*}
+Note moreover that intuitively we are able to 
+infer $J$ from $Z$ better when 
+$\frac{m_t^{1-2/t}}{m_{t-2}}$ is high, 
+as in such cases on average for a time step $i\in[t]$ 
+and a typical $x\sim X_i$,
+the distributions $\dist(X_{i-1}\emid X_i=x)$ and
+$\dist(X_{i+1}\emid X_i=x)$ should be far from each other, 
+as otherwise we can argue that there should be many $t-2$ 
+walks as follows. If $\dist(X_{i-1}\emid X_i=x)$ and
+$\dist(X_{i+1}\emid X_i=x)$ are close to each other, 
+there should be many $p\in\Omega$ which has high probability
+in both
+these distributions. Sample such a $p$, and 
+attach to it a walk sampled from $X_{-1}X_1\ldots X_{i-1}\emid X_{i-1}=p$ 
+and another walk sampled from $X_{i+1}X_{i+2}\ldots X_{t+1}\emid X_{i+1}=p$,
+which leads to a length $t-2$ walk returning to the origin.
+However if $m_{t-2}$ is low, this should not happen and therefore
+$\dist(X_{i-1}\emid X_i=x)$ and
+$\dist(X_{i+1}\emid X_i=x)$ on average should be far apart, 
+which means that we can notice when we take a step backwards in time
+and therefore infer $J$. In particular, \autoref{fig:ex1} 
+gives such an example where $m_{t-2}=0$ and we can always
+recover $J$ with certainty from a sample from $Z$: whenever we take
+a step to the left, it must be that we are at time step $J$.
+
+Given this discussion, a direct approach to proving 
+\autoref{eq:logconv} appears to bound 
+\begin{align}
+\muti{Z}{J}\ge \log \min\set{t^{1-\eps}, 
+\ceil{\delta\frac{m_t^{1-2/t}}{m_{t-2}}}}.
+\label{eq:hope}
+\end{align}
+Unfortunately, this approach does not seem to 
+work as we demonstrate with an example in the full version of this paper.
+The problem here appears to be that we 
+fix a single distribution $Z$ to explore the
+two cases of \autoref{eq:logconv}. 
+In our final approach, we pick different 
+distributions depending on the case we would like 
+to prove. Namely, if 
+$\muti{J}{Z}\ge (1-\eps) \log t$, then carrying 
+out the calculations in \autoref{eq:kvk2} through 
+\ref{eq:absclaim1} with the assumption 
+$\muti{J}{Z}\ge (1-\eps) \log t$, we prove 
+the first case, namely $m_{t+2}\ge t^{1-\eps}m_t^{1+2/t}$ 
+using the distribution given by $Z$.
+If $\muti{J}{Z}< (1-\eps) \log t$ on the other hand, 
+we demonstrate two new random variables $W,Y$ which are 
+distributed respectively on length $t+2$ and length $t-2$ 
+walks so that 
+  $\kldiv{W}{F^{t+2}} + \kldiv{Y}{F^{t-2}}\le 
+    -2\log S^t(\mu, \nu) - \log \delta$,
+which implies that $m_{t-2}m_{t+2}\ge \delta m_t^2$.
+While $W$ and $Y$ are constructed by modifying $X$ in 
+suitable ways, which is how $Z$ was constructed also,
+we do so with the hindsight of 
+having inspected what causes $\muti{J}{Z}$ to be smaller
+than $(1-\eps)\log t$. It is precisely this adaptivity
+which enables this approach to overcome the difficulties
+encountered by the one suggested in 
+\autoref{eq:hope}.
+
+If $\muti{J}{Z}\ge (1-\eps) \log t$, by plugging this into 
+\autoref{eq:mutrelax} and carrying out the 
+following calculations, 
+we get $m_{t+2} \ge t^{1-\eps}\cdot m_t^{1+2/t}$.
+Therefore it remains to show there exists a $\delta>0$
+such that assuming $\muti{J}{Z} < (1-\eps) \log t$,
+we have
+$m_{t+2}m_{t-2}\ge \delta m_t^2$.
+To do so, we will demonstrate random variables 
+$W$ and $Y$
+supported on walks that start from $r\in \OC$
+and return to $r$ 
+after spending respectively $t+2$ and $t-2$ time 
+steps in 
+$\Omega$ such that $\kldiv{W}{F^{t+2}} + 
+\kldiv{Y}{F^{t-2}}\le -2\log S^t(\mu, \nu) - 
+\log \delta$. 
+Notice that by \autoref{lem:jensen} this indeed implies
+that $m_{t+2}m_{t-2}\ge \delta m_t^2$.
+The random variables $W$ and $Y$ will be mixtures of 
+$\Theta(t)$ random walks, in particular, they are not 
+Markovian in general.
+
+For brevity let us set $\mu_i^x \defeq \dist(X_{i-1}\emid X_i = x)$ and 
+$\nu_i^x \defeq \dist(X_{i+1}\emid X_i=x)$.
+Let $U$ be the unary encoding of $J$: a length $t$ bit
+vector of which only the $J$th coordinate is set.
+First we would like to understand 
+the contribution of each bit of $U$ to 
+$\muti{Z}{J}=\muti{Z}{U}$.
+Using the chain rule, we write
+\begin{align}
+(1-\eps)\log t&>   \muti{U}{Z} \nonumber\\
+              &=   \sum_{i=1}^t \muti{U_i}{Z\emid U_{<i}}
+                    \label{eq:t1-chain}\\
+              &=   \sum_{i=1}^t \frac{t-i+1}{t}
+                   \muti{U_i}{Z\emid U_{<i}=0}
+                   \label{eq:t1-condition}\\
+           &\ge \sum_{i=1}^t \frac{t-i+1}{t}
+                \muti{U_i}{Z_iZ_{i+1}\emid U_{<i}=0}
+                \label{eq:t1-data}\\
+           &=   \sum_{i=1}^t\frac{1}{t}
+                \E_{x\sim X_i}\kldiv{\mu_i^x}
+                {\lambda_i \mu_i^x + (1-\lambda_i)\nu^x_i}
+                \nonumber\\
+           &\quad\quad\quad\quad\quad
+                + \sum_{i=1}^t\frac{t-i}{t}
+                \E_{x\sim X_i}\kldiv{\nu_i^x} 
+                {\lambda_i\mu_i^x + (1-\lambda_i)\nu^x_i}
+                \label{eq:t1-split}
+\end{align}
+where we set $\lambda_i \defeq 1/(t-i+1)$, which is
+the probability that $U_i=1\emid U_{<i}=0$.
+Here, \autoref{eq:t1-chain} follows from the 
+chain rule, \autoref{eq:t1-condition} is 
+true because if $U_{<i}\neq 0$ then $U_i=0$ 
+(as $U$ has a single coordinate that is one) 
+and consequently the mutual information is
+zero, and \autoref{eq:t1-data} is the data 
+processing inequality. Next we lower bound 
+\autoref{eq:t1-split} by its first term 
+(which is valid since $\mu^x_i, \nu^x_i$ 
+are distributions hence the second term of 
+\autoref{eq:t1-split} is nonnegative), obtaining
+\begin{align}
+       (1-\eps) \log t &> \E_{i\sim J}\E_{x\sim X_i}
+                \kldiv{\mu_i^x}
+                      {\lambda_i \mu_i^x 
+                      + (1-\lambda_i)\nu^x_i}\,.
+                \label{eq:mut-inf}
+\end{align}
+
+To simplify the presentation, here we only 
+provide the proof of \autoref{thm:main} for 
+$\eps >7/8$ which demonstrates the ideas in 
+their simplest form. This bound already implies all 
+our results in complexity theory, with a constant
+factor loss of no more than 8.
+The proof for any $\eps>0$ can be found in the 
+full version of this paper.
+
+\subsection{The bound for $\eps> 7/8$}
+If we condition on the event $i\in\set{1,\ldots,\lceil t/2 \rceil}$, this expectation
+increases by a factor of at most 2; namely
+\begin{align*}
+\E_{i\sim \sparen{t/2}}
+  \E_{x\sim X_i}
+      \kldiv{\mu_i^x}
+      {\lambda_i \mu_i^x 
+          + (1-\lambda_i)\nu^x_i} < 2(1-\eps)\log t.
+\end{align*}
+By Markov's inequality
+\begin{align*}
+\Pr_{i\sim\sparen{t/2},x\sim X_i}
+  \sparen{\kldiv{\mu_i^x}
+      {\lambda_i \mu_i^x 
+          + (1-\lambda_i)\nu^x_i} \ge 8(1-\eps)\log t} < 1/4,
+\end{align*}
+so it follows that there is a set 
+$T\subseteq\sparen{\lceil t/2\rceil}$ of size
+at least $\floor{t/4}$ such that if $i\in T$ we have
+\begin{align}
+\Pr_{x\sim X_i}
+  \sparen{\kldiv{\mu_i^x}
+      {\lambda_i \mu_i^x 
+          + (1-\lambda_i)\nu_i^x} \ge 8(1-\eps)\log t} < 1/2.
+          \label{eq:halfp}
+\end{align}
+For each $i\in T$ let $X'_i$ be the random variable 
+obtained from $X_i$ by conditioning on those 
+$x\in \supp(X_i)$ satisfying $\kldiv{\mu_i^x}
+{\lambda_i \mu_i^x + (1-\lambda_i)\nu^x_i}<8(1-\eps)\log t$.
+Furthermore, for each $i\in T$ and $x\in\supp(X'_i)$,
+we construct distributions
+$\pi_i^x\colon \Omega\to\realspos$ to be specified later.
+Let $P_i$ be sampled by $x\sim X'_i$ first and then picking
+$p\sim \pi_i^x$. 
+
+\subsection{The distributions $W$ and $Y$}
+Let $K$ be an integer sampled uniformly at
+random from the set $T$ (constructed in 
+the previous section).
+For each fixing $k$ of $K$, the random variables $W\emid K=k$
+and $Y\emid K=k$ are random walks 
+(i.e., they are Markovian) 
+constructed as follows. We first pick $x,p\sim X'_kP_k$.
+The walk $Y\emid K=k$ is generated by concatenating a sample
+from $X_{-1}X_0\ldots X_{k-1}\emid X_{k-1} = p$ and 
+an independent sample from $X_{k+1}\ldots X_{t+1}\emid X_{k+1} = p$.
+The walk $W$ is generated by concatenating a sample from 
+$X_{-1}X_0\ldots X_{k}\emid X_{k} = x$, the path
+$(x, p)$ and $(p,x')$ for an independent sample 
+$x'\sim\nparen{X'_k\emid P_k = p}$ and 
+an independent sample from $X_{k}\ldots X_{t+1}\emid X_{k} = x'$.
+
+For $k\in T$ we define another random walk 
+$\check{X}^k = 
+(\check{X}^k_{-1},\ldots,\check{X}^k_{t+1})$, 
+only to be used in the analysis of
+$W$ and $Y$. We sample $x\sim X'_k$
+and set $\check{X}^k_k = x$. We pick the rest of the coordinates of $\check{X}^k$ according to the distribution $X\emid X_k = x$. Note that for any $k\in T$, we have
+\begin{align*}
+\kldivs{\check{X}^k}{X} = \kldiv{X'_k}{X_k}\le 1
+\end{align*} by \autoref{eq:halfp}
+and \autoref{lem:klcond} and the fact that both $X$ and 
+$\check{X}^k$ are Markovian.
+
+\begin{lemma}
+\label{lem:wy}
+We have
+\begin{align*}
+\kldiv{W\emid K=k}{F^{t+2}} +& \kldiv{Y\emid K=k}{F^{t-2}}\\
+&\le -2\log S^t(\mu,\nu) + 2 + \E_{x\sim X'_k}\kldiv{\pi_k^x}{\mu_k^x} + 
+        \E_{x\sim X'_k}\kldiv{\pi_k^x}{\nu_k^x}.
+\end{align*}
+\end{lemma}
+\begin{proof}
+We have
+\begin{align*}
+\kldiv{W\emid K = k}{F^{t+2}} &= \kldivs{\check{X}^k}{F^t} + 
+  \kldiv{P_k\emid X'_k}{F_{k+1}\emid F_{k}}
+  +\kldiv{X'_k\emid P_k}{F_{k+1}\emid F_{k}}
+\end{align*}
+and further
+\begin{align*}
+\kldiv{Y\emid K = k}{F^{t-2}} +& 
+  \kldiv{P_k\emid X'_k}{F_{k+1}\emid F_{k}}
+  +\kldiv{X'_k\emid P_k}{F_{k+1}\emid F_{k}}
+  \\&= \kldivs{\check{X}^k}{F^t}+\E_{x\sim X'_k}
+      \kldiv{\pi_k^x}{\mu_k^x} + 
+      \E_{x\sim X'_k}\kldiv{\pi_k^x}{\nu_k^x}.
+\end{align*}
+Summing up the two inequalities and substituting 
+$\kldivs{\check{X}^k}{X}\le 1$ we get the result.
+\end{proof}
+At this point, in light of \autoref{lem:wy},
+we could pick each $\pi_k^x$ so that it minimizes
+$\kldiv{\pi_k^x}{\mu_k^x} + \kldiv{\pi_k^x}{\nu_k^x}$:
+the unique minimizer is given by 
+$\pi_k^x = \sqrt{\mu_k^x\nu_k^x} / 
+\iprod{\sqrt{\mu_k^x}}{\sqrt{\nu_k^x}}$. 
+However doing so leads to $W,Y$ which 
+diverge from the $F$ walk by more than a constant,
+and therefore is not good enough for our needs.
+To obtain better random variables $W$ and $Y$, 
+we crucially use the fact that 
+$W$ is a mixture of $\Theta(t)$ random walks. Namely, if
+we consider the entropy coming from the $\muti{W}{K}$ term
+also, a better strategy for picking the distributions 
+$\pi_k^x$ becomes available.
+By contrast, we do not use the fact that $Y$ is a mixture
+and, in fact, it can be replaced by $Y\emid K=k_0$ where
+$k_0 = \arg\min_k\kldiv{Y\emid K = k}{F^{t-2}}$, however
+the averaged quantity $\kldiv{Y\emid K}{F^{t-2}}$ is
+far more convenient to work with.
+
+\subsection{The contribution of $\muti{K}{W}$}
+Similar to \autoref{eq:mut-inf}, we would like to understand
+the contribution of each time step $t\in T$ to 
+$\muti{K}{W}$. Let $V$ be the unary encoding of $K$:
+a length $t$ bit vector of which only the $V$th 
+coordinate is set. Using the chain rule for 
+mutual information
+\begin{align*}
+\muti{W}{V} &=   \sum_{i\in T}\muti{V_i}{W\emid V_{<i}}\\
+            &\ge \E_{k\sim K} \E_{x\sim X'_k} 
+                 \kldiv{\pi_k^x}
+           {\eta_i \pi_k^x + (1-\eta_i)\widetilde{v}_k^x},
+\end{align*}
+where $\eta_k = 1/\rank_{T}(k)$ and 
+$\widetilde{v}_k^x 
+    \defeq \E_{j > k : j\in T} 
+    \dist(\check{X}^j_{k+1}\emid \check{X}^j_k = x)$.
+Here $\rank_T(i)$ denotes the position of 
+$i\in T$ when the elements of $T$ are sorted in decreasing order.
+By \autoref{eq:halfp}, and the definition of
+$X'_k$, we have
+$\widetilde{v}_k^x(y)\le 2\nu_k^x(y)$ for all $y\in \Omega$.
+Therefore we conclude that 
+\begin{align}
+\muti{W}{K} \ge \E_{k\sim K} \E_{x\sim X'_k} 
+                 \kldiv{\pi_k^x}
+           {\eta_k \pi_k^x + 2(1-\eta_k)\nu_k^x}.\label{eq:muti-nu}
+\end{align}
+Note in the above divergence expression the 
+reference measure is not a probability distribution, 
+which our definition permits (cf.\ \autoref{eq:kldiv}).
+
+Recall our goal in this section is to upper bound 
+$\kldiv{W}{F^{t+2}} + \kldiv{Y}{F^{t-2}} 
++ 2\log S^t(\mu, \nu)$ by $\log 1/\delta$. 
+Let us write
+\begin{align}
+\kldiv{W}{F^{t+2}} +& \kldiv{Y}{F^{t-2}} 
++ 2\log S^t(\mu, \nu) \nonumber \\
+&\le \kldiv{W\emid K}{F^{t+2}} 
+  + \kldiv{Y\emid K}{F^{t-2}} 
+  - \muti{K}{W} + 2\log S^t(\mu, \nu)
+    \nonumber\\
+&\le 2 + \E_{k\sim K, x\sim X'_k}
+  \kldiv{\pi^k_x}{\mu^k_x} + 
+  \kldiv{\pi^k_x}{\nu^k_x} - \muti{K}{W}
+        \nonumber\\
+&\le 2 + \E_{k\sim K, x\sim X'_k} \E_{y\sim \pi_k^x} \log
+\frac{\eta_k \pi_k^x(y)^2 + 2(1-\eta_k)\nu_k^x(y)\pi_k^x(y)}
+{\mu_k^x(y)\nu_k^x(y)}\label{eq:div-min},
+\end{align}
+where the second inequality follows from 
+\autoref{lem:wy} and the last inequality is 
+obtained by plugging in \autoref{eq:muti-nu}.
+Note that the function $z\mapsto z \log(az^2 + bz)$ is 
+strictly convex
+in $\realspos$ whenever $ab > 0$, therefore 
+for each $k,x$ there is a unique minimizer $(\pi_k^x)^*$
+of \autoref{eq:div-min},
+which can be calculated, say, using Lagrange multipliers. 
+However, instead of the minimizer, we work with a simple approximation of it.
+For each $k\in T$ and $x\in \supp(X'_k)$, we let
+\begin{align*}
+\Psi_k^x \defeq \setbuilder{y\in\Omega}
+{\nu_k^x(y)\ge \frac{\lambda_k}{1-\lambda_k}\mu_k^x(y)}.
+\end{align*}
+By definition of $X'_k$, we have
+$\kldiv{\mu_i^x}
+      {\lambda_i \mu_i^x 
+          + (1-\lambda_i)\nu^x_i} < 8(1-\eps)\log t$.
+Let $\gamma = 1- 8(1-\eps)$, which is positive by our assumption
+$\eps>7/8$.
+By Markov's inequality, and the fact that 
+$\lambda_k \le 2/t$,
+we get
+\begin{align*}
+\mu_k^x(\Psi_k^x)\ge \gamma
+\end{align*}
+for large enough $t$.
+Let $\pi_k^x$ be $\mu_k^x \emid \Psi_k^x$, namely we have
+$\pi_k^x(y) = \mu_k^x(y) / \mu_k^x(\Psi_k^x)$ if 
+$y\in\Psi_k^x$, and $\pi_k^x(y) = 0$ otherwise.
+Continuing from \autoref{eq:div-min}, we have
+\begin{align}
+ &\le 2 +  \E_{k\sim K, x\sim X'_k} \E_{y\sim \pi_k^x} \log
+\frac{\eta_k \pi_k^x(y)^2 + 2(1-\eta_k)\nu_k^x(y)\pi_k^x(y)}
+{\mu_k^x(y)\nu_k^x(y)}\nonumber\\
+ &\le 2+ 
+ \E_{k\sim K} \log
+\nparen{\frac{\eta_k(1-\lambda_k)}{\lambda_k \gamma^2}+\frac{2}{\gamma}},
+\label{eq:setsh}
+\end{align}
+where the second inequality is true by definition of
+$\Psi^x_k$ and $\pi^x_k$. 
+Now we argue that the expectation term in \autoref{eq:setsh} is maximized
+when $T$ is the set containing the smallest $|T|$ elements of 
+$[\ceil{t/2}]$. To see this suppose there is an $i\notin T$
+which is smaller than the maximum element of $T$.
+Let $j$ be the smallest item in $T$ which is greater than $i$. 
+We see that the expectation term
+increases if we replace $T$ by $T\setminus\set{j}\cup\set{i}$
+as $\log\nparen{\frac{C(1-\lambda_k)}
+{\lambda_k \gamma^2}+\frac{2}{\gamma}}$ is decreasing in $k$ 
+and the ranks
+do not change after swapping $j$ with $i$.
+Therefore, 
+\begin{align}
+\kldiv{W}{F^{t+2}} + &\kldiv{Y}{F^{t-2}} + 2\log S^t(\mu, \nu)
+\nonumber \\
+&\le 2+
+\log\nparen{\prod_{i=1}^{|T|}\frac{t/2 + 3i}{i \gamma^2}}^{1/|T|}
+\nonumber \\
+&=\log\frac{12}{\gamma^2} + 
+\log\nparen{\prod_{i=1}^{|T|}\frac{t/6 + i}{i}}^{1/|T|}
+\nonumber \\
+&\le \log\frac{12}{\gamma^2} + \log\binom{2|T|}{|T|}^{1/|T|}
+\label{eq:binomub}\\
+&\le \log\frac{48}{\gamma^2},
+\end{align}
+where the $\binom{2|T|}{|T|}$ is the middle binomial coefficient,
+in the second inequality we use the fact $|T|>t/6$,
+and the last inequality is true as $\smash{\binom{2n}{n}< 2^{2n}}$.
+Therefore it is enough to choose $\eps > 7/8$ and 
+$\delta\le \frac{\nparen{1-8(1-\eps)}^2}{48} = \frac{4}{3}(\eps- \sfrac{7}{8})^2$. We have established
+the following.
+
+\begingroup
+\def\thetheorem{\ref{thm:main}}
+\begin{theorem}[restated]
+For any $\eps>7/8$ there is a $\delta>0$ such that
+$m_{t+2}\ge t^{1-\eps} m_t^{1+2/t}$ unless 
+$m_{t+2}m_{t-2}\ge \delta m_t^2$.
+\end{theorem}
+\addtocounter{theorem}{-1}
+\endgroup

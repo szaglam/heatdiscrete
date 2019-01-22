@@ -1,0 +1,412 @@
+% !TeX root = heatdiscrete.tex
+\section{Introduction}
+\label{sec:introduction}
+
+Suppose that some initial heat configuration 
+$u\colon\Omega\to\realspos$ is given over a finite 
+space $\Omega$ and the configuration evolves 
+according to the map $w\mapsto Sw$ in each time step 
+$t=0,1,\ldots$, for some symmetric stochastic matrix 
+$S\colon \Omega\times\Omega\to\realspos\,$.
+Assume that we are interested in the amount of heat 
+contained in a certain region $R\subseteq \Omega$ 
+and how this quantity changes over time. In notation, 
+assuming $\lnorm{u}{2}=1$ for normalization purposes 
+and $v(x) \defeq 1/|R|^{1/2}$ for $x\in\Omega$ 
+(and 0 otherwise), we would like to understand how
+\begin{align*}
+m_t \defeq \iprod{v}{S^tu}
+\end{align*}
+changes as a function of $t$. In this paper we 
+derive local bounds that $\set{m_t}_{t=0}^\infty$ 
+must obey for any $S,u$ and $v$ satisfying the 
+symmetry, magnitude and positivity constraints above 
+(in fact our bounds work for any countable
+$\Omega$, arbitrary non-negative unit vector $v$ 
+and symmetric non-negative $S$).
+Our first bound $m_{t+2}\ge \smash{m_t^{1+2/t}}$ 
+answers a question of Blakley and Dixon from 1966
+(see \autoref{conj:blakley-dixon} below) which was later 
+conjectured independently by 
+Erdős and Simonovits in 1982 also 
+(see \autoref{conj:erdos-simonovits} in 
+\autoref{sec:relatedwork}).
+
+Moreover we establish a tight connection between such 
+bounds and the well-studied $k$-Hamming distance problem
+\cite{PangG1986, Yao2003, CormodePS2000, BarYossefJKK2004,
+GavinskyKW2004, HuangSZZ2006,
+BlaisBM2012, BuhrmanGMW2012, BlaisBG2014, AmbainisGSU2015} 
+and the $k$-Hamming weight problem
+\cite{AdaFH2012, BlaisK2012, BuhrmanGMW2012}
+and obtain the first tight bounds for respectively
+the communication complexity and parity decision tree 
+complexity of them.
+Our tight $\Omega(k \log (k/\delta))$ lower bound 
+for the $\delta$-error communication complexity of 
+the $k$-Hamming distance problem (that applies 
+whenever $k^2< \delta n$) answers affirmatively a 
+conjecture stated in \cite{BlaisBG2014} 
+(Conjecture 1.4).
+Prior to our work, the best impossibility results 
+for this problem were an $\Omega(k\log^{(r)}k)$ bits 
+lower bound ($\smash{\log^{(r)}z}$ being the $r$ nested 
+applications of logarithm) that applies to any randomized $r$-round 
+communication protocol \cite{SaglamT2013}, 
+and an $\Omega(k\log (1/\delta))$ lower bound that 
+applies to any $\delta$-error randomized protocol for 
+$k <\delta n$ \cite{BlaisBG2014}.
+
+Our parity decision tree lower bound shows that any 
+$\delta$-error parity decision tree solving the 
+$k$-Hamming weight problem has size 
+$\exp\Omega\nparen{k\log (k/\delta)}$, 
+which directly implies an $\Omega(k\log (k/\delta))$ 
+bound on the depth of any such decision tree. 
+Previously no nontrivial lower bound was known for 
+the parity decision tree size of this problem and 
+an $\Omega(k\log (1/\delta))$ bound on the parity 
+decision tree depth followed from the communication 
+complexity bound of \cite{BlaisBG2014}. Prior to 
+\cite{BlaisBG2014}, the best bound on the parity 
+decision tree depth was $\Omega(k)$, derived in 
+\cite{BlaisBM2012} and \cite{BlaisK2012}.
+
+Either by combining our communication complexity lower 
+bound with the reduction technique developed in 
+\cite{BlaisBM2012} or by combining our parity decision 
+tree lower bound with a reduction given in 
+\cite{BhrushundiCK2014}, one obtains an 
+$\Omega(k\log (k/\delta))$ bound for any (potentially adaptive) 
+property tester for the $\delta$-error probability 
+$k$-linearity testing problem. This establishes the 
+correct bound for this problem which was studied extensively 
+\cite{FischerLNRRS2002, Goldreich2010, BlaisK2012, 
+BhrushundiCK2014,BuhrmanGMW2012, BlaisBM2012}
+since \cite{FischerLNRRS2002} or earlier.
+
+
+\subsection{Motivating our bounds on $m_t$}
+We would like to provide some intuition as to why one should expect
+\begin{align}
+m_{t+2}    &\ge m_t^{1+2/t}, \text{ and}\label{eq:bd66}\\
+m_{t+2}    &\ge m_t^{1+2/t}\cdot \min\set{t^{1-\eps}, 
+            \delta\frac{m_t^{1-2/t}}{m_{t-2}}}
+\end{align}
+to hold for appropriate $\eps,\delta$.
+Recalling that $S$ is a symmetric matrix with maximum 
+eigenvalue 1, we may write $S=QDQ^\transpose$
+for an orthonormal matrix $Q$ having columns $q_x$, $x\in\Omega$
+and a diagonal matrix $D$ with entries $\lambda_x \le 1$, 
+$x\in \Omega$. Plugging this into 
+$m_t=\iprod{v}{S^tu}$, we get
+\begin{align}
+\label{eq:spectralsum}
+m_t = \sum_{x\in\Omega}\lambda_x^t\iprod{u}{q_x}\iprod{v}{q_x}.
+\end{align}
+For sake of analogy let us drop our assumption that $S, u, v$
+are coordinate-wise nonnegative for a moment but instead assume
+that each summand in the right hand side of
+\autoref{eq:spectralsum}
+is nonnegative by some coincidence. In this case we can
+consider $\set{m_t}_{t=0}^\infty$ as the moment sequence of a 
+random variable supported on $[0,1]$ that takes the
+value $|\lambda_x|$ with probability 
+$|\iprod{u}{q_x}\iprod{v}{q_x}|$ and the value 0 with
+probability
+$1-\sum_x|\iprod{u}{q_x}\iprod{v}{q_x}|$ (which is nonnegative
+by Cauchy-Schwarz inequality). 
+This would imply that $\set{m_t}_{t=0}^\infty$ is 
+{\em completely monotone} by Hausdorff's characterization 
+\cite{Hausdorff1921} and therefore log-convex 
+(e.g., \cite{NiculescuP2005}, Section 2.1, Example 6).
+
+One particular implication of the log-convexity of 
+$\set{m_t}_{t=0}^\infty$, that 
+$\frac{1}{t}\log m_t + \frac{t-1}{t}\log m_0\ge \log m_1$,
+when combined with the fact $0\le m_0\le 1$ (that follows from our
+assumption on the terms of \autoref{eq:spectralsum}), leads to
+$m_t\ge m_1^t$.
+In 1958, Mandel and Hughes showed that if $u=v$, rather
+surprisingly, one can trade the assumption that the summands of
+\autoref{eq:spectralsum} are nonnegative with the assumption
+that $S$ and $u=v$ are coordinate-wise nonnegative and still
+obtain the conclusion $m_t\ge m_1^t$:
+\begin{theorem}[Mandel and Hughes \cite{MandelH1958}]
+\label{thm:blakley-roy}
+Let $u$ be a nonnegative unit vector and 
+$S$ be a symmetric matrix with nonnegative entries. For an integer%
+\footnote{Since $u=v$ here, the summands inside 
+\autoref{eq:spectralsum} are nonnegative when $t$ is even  
+so this theorem is most interesting for $t$ odd.}
+$t\ge1$ we have $\iprod{u}{S^tu}\ge \iprod{u}{Su}^t$.
+\end{theorem}
+
+
+A more general implication of the log-convexity of 
+$\set{m_t}_{t=0}^\infty$ and that $m_0\le 1$ is that for 
+$k\ge t$, $\frac{t}{k}\log m_k + \frac{k-t}{k}\log m_0\ge \log m_t$,
+therefore $m_k^t\ge m_t^k$. In 1966,
+Blakley and Dixon \cite{BlakleyD1966} investigated 
+whether $m_k^t\ge m_t^k$ holds in the case $u=v$ when the nonnegativity
+assumption on the summands of \autoref{eq:spectralsum} is
+replaced by the coordinate-wise nonnegativity of $S$, $u=v$.
+They note that the inequality $m_k^t\ge m_t^k$ 
+fails when $k$ and $t$ have different 
+parity and otherwise holds true under the restriction 
+$m_t\ge e^{-4t}$.
+While the following is not explicitly stated as a conjecture 
+in \cite{BlakleyD1966}, they write
+\begin{quote}
+if $t> 1$, [...] we cannot show that the inequality
+\autoref{eq:bd66} holds for each nonnegative $|\Omega|$-vector
+$u$ if $S$ is nonnegative.
+\end{quote}
+so with the earlier caveat we attribute the following to Blakley and
+Dixon \cite{BlakleyD1966}:
+
+\begin{conjecture}[Blakley and Dixon \cite{BlakleyD1966}]
+\label{conj:blakley-dixon}
+Let $S\colon\Omega\times\Omega\to\realspos$ be a symmetric matrix
+with nonnegative entries and let $u\colon\Omega\to\realspos$ be a
+nonnegative unit vector. For positive integers 
+$k\ge t$ of the same parity, we have
+  \begin{align*}
+    \iprod{u}{S^ku}^t\ge \iprod{u}{S^tu}^k.
+  \end{align*}
+\end{conjecture}
+
+In \autoref{sec:monotonicity} we prove the following theorem which
+shows that a generalization of \autoref{conj:blakley-dixon}
+holds true.
+\begin{theorem}
+\label{thm:blakley-dixon}
+Let  $S\colon\Omega\times\Omega\to\realspos$ be a symmetric matrix
+with nonnegative entries and 
+$u,v\colon\Omega\to\realspos$ be
+nonnegative unit vectors. For positive integers 
+$k\ge t$ of the same
+parity, we have
+  \begin{align*}
+    \iprod{v}{S^ku}^t\ge \iprod{v}{S^tu}^k.
+  \end{align*}
+\end{theorem}
+It goes without saying that \autoref{eq:bd66} is 
+equivalent to \autoref{thm:blakley-dixon} as we can rearrange 
+\autoref{eq:bd66} to $\smash{m_{t+2}^{1/(t+2)}\ge m_t^{1/t}}$ and apply
+it iteratively to obtain 
+$\smash{m_k^{1/k}\ge\cdots\ge m_{t+2}^{1/(t+2)}\ge m_t^{1/t}}$ whenever 
+$k\ge t$ and $k,t$ have the same parity. Moreover, while defining 
+\autoref{eq:bd66} we assumed $S$ to be substochastic only to illustrate our
+interpretation of the inequality: indeed any nonnegative $S$ can be scaled 
+to be substochastic as both sides of \autoref{eq:bd66} are 
+$(t+2)$-homogeneous in $S$.
+
+In \autoref{thm:blakley-roy} and \autoref{thm:blakley-dixon} 
+we observed that increasingly more general implications 
+of the log-convexity of $\set{m_t}_{t=0}^\infty$ can be 
+derived by only assuming the coordinate-wise nonnegativity 
+of $S,u$ and $v$. One may naturally wonder if the 
+coordinate-wise nonnegativity of $S,u$ and $v$ implies
+the log-convexity of $\set{m_t}_{t=0}^\infty$ in its entirety. 
+Unfortunately the following example shows that this is 
+far from the truth.
+\begin{figure}[H]
+\centering
+\begin {tikzpicture}[]
+\tikzstyle{state}=[circle, draw, inner sep=0pt, minimum size=27pt]
+\node[state] (A){$0$};
+\node[state] (B) [right =of A] {$1$};
+\node[state] (C) [right =of B] {$2$};
+\node        (E) [right =of C] {$\cdots$};
+\node[state] (J) [right =of E] {$t-1$};
+\node[state] (K) [right =of J] {$t$};
+\path (A) edge node[below] {$\eps$} (B);
+\path (B) edge node[below] {$\eps$} (C);
+\path (C) edge node[below] {$\eps$} (E);
+\path (E) edge node[below] {$\eps$} (J);
+\path (J) edge node[below] {$\eps$} (K);
+\end{tikzpicture}
+\caption{$\Omega=\set{0,1,\ldots, t}$, $S(i,i+1)=S(i+1,i)=\eps$ for $i=0,\ldots,t-1$.}
+\label{fig:ex1}
+\end{figure}
+Consider the transition matrix $S$ on 
+$\Omega=\set{0,1,\ldots,t}$ such that 
+$S(i,i+1)=S(i+1,i)=\eps$ for 
+$i=0,1,\ldots,t-1$ and $S(i,j)=0$ elsewhere.
+Let $u$ and $v$ be the point masses respectively on 
+states $0$ and $t$; namely 
+$u=[1,0,\ldots,0]^\transpose$ and 
+$v=[0,0,\ldots,1]^\transpose$.
+We have $m_{t-2}=0$, $m_t=\eps^t$ and $m_{t+2}=t\eps^{t+2}$. 
+Therefore $m_{t-2}m_{t+2} = 0 \not\ge \eps^{2t} = m_t^2$.
+In this example the log-convexity breaks 
+(in the strongest possible way) because the states $0$ 
+and $t$ are separated by $t$ hops according to $S$ and 
+the point mass at state $0$ cannot reach state $t$ 
+before the $t$th time step. 
+
+Our next theorem shows that such reachability issues 
+are essentially the only way the log-convexity property 
+can fail to hold:
+\begin{theorem}
+\label{thm:main}
+For every $\eps>0$ there is a $\delta>0$ such that 
+for any symmetric matrix 
+$S\colon\Omega\times\Omega\to\realspos$ and unit 
+vectors $u,v\colon\Omega\to\realspos$ with nonnegative 
+entires, defining $m_t$ as before, we have
+\begin{align}
+\frac{m_{t+2}}{m_{t}^{1+2/t}}\ge
+\min\set{t^{1-\eps}, \delta\frac{m_t^{1-2/t}}
+{m_{t-2}}},\quad\quad\forall t\ge 2.
+\label{eq:insidemain}
+\end{align}
+\end{theorem}
+In other words, \autoref{thm:main} shows that one can recover a
+truncated version of the log-convexity of
+$\set{m_t}_{t=0}^\infty$ from just the coordinate-wise
+nonnegativity assumption of $S,u$ and $v$.
+We stress that \autoref{thm:main} is tight 
+up to the appearance of $\eps$ and the choice of 
+$\delta=\delta(\eps)$. A direct calculation
+on \autoref{fig:ex1} for time steps $t, t+2, t+4$ 
+shows that \autoref{eq:insidemain} cannot be improved to
+\begin{align*}
+\frac{m_{t+2}}{m_{t}^{1+2/t}}\ge
+\min\set{t^{1-2/t}, 
+\nparen{\frac{1+\eta}{2}}\frac{m_t^{1-2/t}}{m_{t-2}}}
+\end{align*} for $\eta>0$.
+
+\subsection{Related work on $m_t$}
+\label{sec:relatedwork}
+Almost simultaneously with the work of Mandel and Hughes
+\cite{MandelH1958}, Mulholland and Smith also prove
+\autoref{thm:blakley-roy} in \cite{MulhollandS1959} and 
+moreover they characterize the equality conditions of 
+the inequality. Independently, in 1965, Blakley and Roy 
+\cite{BlakleyR1965} prove the same inequality and
+characterize the equality conditions and 
+\cite{London1966} provides an alternative proof to that 
+of \cite{MulhollandS1959} in 1966.
+We remark that \autoref{thm:blakley-roy} is 
+most commonly referred to as the Blakley-Roy bound
+or ``Sidorenko's conjecture for walks''.
+Note these results show that \autoref{conj:blakley-dixon} 
+is true whenever $t$ divides $k$. 
+Finally in 2012, Pate shows that $m_t\ge m_1^t$ 
+without the restriction $u=v$:
+
+\begin{theorem}[Pate \cite{Pate2012}]
+Let $S\colon\Omega\times\Omega\to\realspos$ be a 
+symmetric matrix
+with nonnegative entries and let 
+$u,v\colon\Omega\to\realspos$ be
+nonnegative unit vectors.
+It holds that
+\begin{align*}
+\iprod{v}{S^{2t+1}u} \ge \iprod{v}{Su}^{2t+1},
+\end{align*}
+with equality if and only if 
+$\iprod{v}{S^{2t+1}u} =0$ or 
+$Su=\lambda v$ and 
+$Sv=\lambda u$ 
+for some $\lambda\in\realspos$.
+\end{theorem}
+This result already shows that 
+\autoref{thm:blakley-dixon} is true when $t$ divides $k$ 
+but such a bound does not have any implications for 
+our applications in complexity theory. In \cite{ErdosS1982},
+Erdős and Simonovits conjecture the following.
+\begin{conjecture}
+[Erdős and Simonovits \cite{ErdosS1982}, Conjecture 6]
+\label{conj:erdos-simonovits}
+For a graph $G=(V,E)$, let $w_k(G)$ be the number length 
+$k$ walks in $G$ divided by $|V|$.
+For an undirected graph $G$, we have 
+$w_k(G)^t\ge w_t(G)^k$ for $k>t$ of the same parity.
+\end{conjecture}
+This conjecture was recalled in a recet book
+\cite{Taubig2017} by Täubig as Conjecture~4.1.
+Note that \autoref{conj:erdos-simonovits} is a 
+specialization of \autoref{conj:blakley-dixon} to
+$S$ having 0-1 entries and  
+$u=\mathbf{1}/\sqrt{|V|}$ therefore our 
+\autoref{thm:blakley-dixon} verifies 
+\autoref{conj:erdos-simonovits} as well.
+
+
+\subsection{Our results in complexity theory}
+\label{sec:results-cc}
+Here we list our results in complexity theory; see
+\autoref{sec:applications} for the definition
+of the models and the problems.
+The following theorem 
+(which was already known \cite{BlaisBG2014})
+is a consequence of \autoref{thm:blakley-dixon} 
+and uses the standard corruption technique in 
+communication complexity.
+\begin{theorem}
+\label{thm:klogdelta}
+Any two party $\delta$-error randomized protocol
+solving the $k$-Hamming distance problem 
+over length-$n$ strings communicates 
+at least $\Omega(k\log (1/\delta))$ 
+bits for $k^2\le \delta n$.
+\end{theorem}
+The next is our main result for the communication 
+complexity of the $k$-Hamming distance problem
+and is a consequence of \autoref{thm:main}. 
+This result cannot be obtained by the standard 
+corruption technique and
+requires a suitable modification similar to 
+\cite{Sherstov2012}.
+\begin{theorem}
+\label{thm:klogk}
+Any two party $\delta$-error randomized protocol
+solving the $k$-Hamming distance problem 
+over length-$n$ strings communicates 
+at least $\Omega(k\log (k/\delta))$ 
+bits for $k^2\le \delta n$.
+\end{theorem}
+\begin{theorem}
+\label{thm:paritysize}
+Any $\delta$-error parity decision tree 
+deciding the $k$-Hamming weight predicate 
+over length-$n$ strings
+has size $\exp \Omega\nparen{k\log (k/\delta)}$
+for $k^2< \delta n$.
+\end{theorem}
+\begin{corollary}
+\label{cor:propertytest}
+Any $\delta$-error probability 
+property tester for 
+$k$-linearity requires 
+$\Omega(k\log (k/\delta))$ queries.
+\end{corollary}
+
+Note the bound $m_k^t\ge m_t^k$ obtained in 
+\cite{BlakleyD1966} under the condition $m_t\ge e^{-4t}$ 
+does not have any implications for the communication 
+complexity of the $k$-Hamming distance problem as our 
+reduction crucially uses the fact that $u$ and $v$ are 
+arbitrary, however it does lead to an $\exp\Omega(k)$ 
+lower bound for the parity decision tree size of the 
+$k$-Hamming weight problem when combined with our 
+reduction.
+
+\begin{remark}
+Note that in \autoref{thm:blakley-dixon}, when $u=v$ and either
+both $k,t$ are even or $S$ is positive semidefinite, the
+summands of \autoref{eq:spectralsum} become nonnegative and the
+inequality holds trivially. For our application in communication
+complexity we crucially use the fact that $u$ and $v$ are
+arbitrary and for our application in parity decision trees, one
+can do away with $u=v$ but only at the expense of having to
+choose $k,t$ odd. 
+In both results the $S$ we choose has eigenvalues $1$ and $-1$ 
+with equal multiplicities and therefore far away from being positive 
+semidefinite. In either case, the implications of
+\autoref{thm:blakley-dixon} in complexity theory follow 
+from the interesting cases of this theorem.
+\end{remark}

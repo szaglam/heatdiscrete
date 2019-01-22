@@ -1,0 +1,486 @@
+% !TeX root = heatdiscrete.tex
+\section{Monotonicity of 
+$t\mapsto m_{2t}^{1/(2t)}$ and 
+$t\mapsto m_{2t+1}^{1/(2t+1)}$}
+\label{sec:monotonicity}
+
+In this section we prove \autoref{thm:blakley-dixon}
+which we restate here 
+(with additional equality conditions) 
+for the convenience of the reader.
+Recall this theorem confirms 
+\autoref{conj:blakley-dixon} 
+and \autoref{conj:erdos-simonovits}.
+
+\begingroup
+\def\thetheorem{\ref{thm:blakley-dixon}}
+\begin{theorem}[restated]
+Let $S\colon\Omega\times\Omega\to\realspos$ be a 
+symmetric matrix with nonnegative entries and 
+$u,v\colon\Omega\to\realspos$ be
+nonnegative unit vectors. For positive integers 
+$k\ge t$ of the same
+parity, we have
+  \begin{align}
+    \iprod{v}{S^ku}^t\ge \iprod{v}{S^tu}^k,
+    \label{eq:bd-inthm}
+  \end{align}
+with equality if and only if $\iprod{v}{S^ku} = 0$ or
+$Su =\lambda v$ and $Sv=\lambda u$ for some 
+$\lambda\in\realspos$ when $t$ is odd and 
+$u=v$ is an eigenvector of $S^2$ when $t$ is even.
+\end{theorem}
+\addtocounter{theorem}{-1}
+\endgroup
+
+We prove \autoref{thm:blakley-dixon} by an 
+information theoretic argument.
+Define the distributions $\mu \defeq u/\lone{u}$ and 
+$\nu \defeq v/\lone{v}$.
+Since either side of 
+\autoref{eq:bd-inthm} is $kt$-homogeneous in $S$, we may
+assume that $S$ is substochastic by scaling as needed. 
+Having fixed this normalization, we view 
+\autoref{eq:bd-inthm} as a statement about random walks
+on $\Omega$ that start from a state sampled according to 
+$\mu$ or $\nu$ and evolve according to the transition 
+matrix $S$.
+
+\subsection{Reference random walks}
+\label{sec:refwalk}
+\def\OC{\Omega_\circ}
+Let $\OC = \Omega\cup\set{r}$ for some state $r\notin\Omega$ and 
+$t$ be a positive integer. Recall that 
+$\mu = u/\lone{u}$ and $\nu = v/\lone{v}$.
+We start by defining random walks $F^t, B^t$ on $\OC$
+that evolve in discrete time steps $-1, 0,1, \ldots, t, t+1$.
+
+The random walk $F^t$ starts at $r$ and transitions to 
+a state $x\in\Omega$ with probability $\mu(x)$ at time step $-1$.
+In steps $0,1,\ldots, t-1$, the random walk proceeds according to
+the transition matrix $S$. At the time step $t$,
+each state $x\in\Omega$ transitions to $r$ 
+with probability $\nu(x)$ and
+transitions to an arbitrary state in 
+$\Omega$ with probability
+$1-\nu(x)$ 
+(say, all of them to the same arbitrary state).
+We view $F^t$ as a joint random variable
+$F^t = (F^t_{-1},F^t_0,\ldots,F^t_{t+1})$,
+where $F^t_i$ is the location of the walk in time step $i$.
+
+The random walk $B^t$ proceeds backwards in time. At time 
+step $t+1$ the walk $B^t$ starts at $r$ and transitions
+to a state $x\in\Omega$ with probability $\nu(x)$.
+In time
+steps $t, t-1,\ldots, 1$, the random walk proceeds as prescribed
+by $S$.
+At time step $0$, each state $x\in\Omega$ transitions
+to $r$ with probability $\mu(x)$
+and to an arbitrary state in
+$\Omega$ with probability $1-\mu(x)$.
+Similarly, $B^t$ denotes
+the joint random variable 
+$B^t = (B^t_{-1},B^t_0,\ldots,B^t_{t+1})$,
+where $B^t_i$ is the
+location of the walk at time step $i$.
+
+The following facts about $F^t$ and $B^t$ are immediate.
+The random variables $F^t_{-1}$ and $B^t_{t+1}$ are fixed
+to a single value $r$. The random variables $F^t$, $B^t$ are Markovian,
+namely,
+$\dist(F^t_i \emid F^t_{i-1},\ldots,F^t_{-1}) 
+    = \dist(F^t_i \emid F^t_{i-1})$ and 
+$\dist(B^t_{i-1} \emid B^t_{i},\ldots B^t_{t+1})
+    = \dist(B^t_{i-1} \emid B^t_{i})$ for 
+$i\in \set{0,\ldots, t+1}$.
+
+
+\subsection{Random walks returning to the origin}
+Assume that $\Pr[F^t_{t+1}=r]>0$.
+Let $X$ be the walk $F^t$ conditioned on
+$F^t_{t+1} = r$.
+Note that $X$ is a random variable on the sample space
+$\OC^{t+3}$. The next two lemmas explicitly calculate 
+the distribution of $X$.
+
+For a matrix $M\colon\Omega\times \Omega\to\realspos$,
+functions $f,g\colon\Omega\to\realspos$, and $x,y\in \Omega$
+we use the shorthands
+\begin{align*}
+M(f,y)&\defeq \sum_{x\in\Omega} f(x)M(x,y) = (M^\transpose f)(y)\\
+M(x,g)&\defeq \sum_{y\in\Omega} M(x,y)g(y) = (Mg)(x)\\
+M(f,g)&\defeq \sum_{x,y\in\Omega} f(x)M(x,y)g(y) 
+    = f^\transpose M g,
+\end{align*}
+where the last expression in each line is understood as
+a matrix vector multiplication.
+\begin{lemma}
+\label{lem:xdist}
+Under our assumption $S^t(\mu, \nu) > 0$,
+\begin{enumerate}[(i)]
+\item we have
+  $\Pr\sparen{X_i = x} 
+      = \frac{S^i(\mu,x)S^{t-i}(x,\nu)}{S^t(\mu,\nu)}$, and
+%
+\item if $S^{t-i}(x,\nu)>0$, 
+    we have $\Pr[X_{i+1}=y \emid X_{\le i} = x_{\le i}]
+    =\frac{S(x_i,y)S^{t-i-1}(y,\nu)}{S^{t-i}(x_i,\nu)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+From the definition of $F^t$ (cf.\ \autoref{sec:refwalk}), 
+we have 
+  \begin{align}
+    \Pr[F^t_i =x] &= S^i(\mu, x)\label{teq:xda}\\
+    \Pr[F^t_{t+1}=r\emid F^t_{i}=x] 
+        &= S^{t-i}(x,\nu)\label{teq:xdb}\\
+    \Pr[F^t_{t+1}=r] &= S^t(\mu,\nu)\label{teq:xdc}\\
+    \Pr[F^{t}_{i+1}=y\text{ and }F^t_{t+1}=r\emid 
+        F^{t}_i =  x] &= S(x,y)S^{t-i-1}(y,\nu)\label{teq:xde}.
+  \end{align}
+%TODO(saglam): some more elegant citing mechanism
+Using Bayes' rule with \autoref{teq:xda},
+\eqref{teq:xdb} and \eqref{teq:xdc} gives (i).
+Combining \autoref{teq:xdb}, \eqref{teq:xde}
+and the observation that $F^t$ is Markovian
+gives (ii).
+\end{proof}
+
+With \autoref{lem:xdist} we confirm that the random variable $X=(X_{-1},X_0,\ldots,X_{t+1})$ is Markovian; 
+in particular a time inhomogeneous random walk on $\OC$.
+Next we observe that the random variable $B^t$ conditioned
+on $B^t_{-1}=r$ is precisely $X$ also.
+
+\begin{lemma}
+\label{lem:xbackwards}
+Under our assumption $S^t(\mu,\nu)>0$,
+\begin{enumerate}[(i)]
+  \item we have $\dist(X) = \dist(B^t\emid B^t_{-1}=r)$, and
+  \item if $S^i(\mu, x)>0$, we have 
+      $\Pr[X_{i-1}=y\emid X_{\ge i} = x_{\ge i}] = 
+          \frac{S(x_i,y)S^{i-1}(y,\mu)}{S^i(x_i,\mu)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+For any $x\in\OC^{t+3}$ with $x_{t+1} = r$,
+  \begin{align*}
+    \Pr[X = x] &= \frac{\mu(x_0)\prod_{i=1}^t S(x_{i-1},x_i)\nu(x_t)}
+    {S^t(\mu,\nu)}\\
+    &=\frac{\nu(x_t)\prod_{i=1}^t S(x_i, x_{i-1}) \mu(x_0)}
+        {S^t(\mu,\nu)}
+            &&\text{(as $S$ is symmetric)}\\
+    &= \frac{\Pr[B^t = x]}{\Pr[B^t_{t+1} = r]}
+     = \Pr[B^t = x \emid B^t_{t+1} = r]
+        &&\text{(by Bayes' rule).}
+  \end{align*}
+This proves (i). Given (i), the proof of (ii) is 
+the same as \autoref{lem:xdist}(ii).
+\end{proof}
+
+
+\begin{lemma}
+\label{lem:xvsf}
+We have $\kldiv{X}{F^t} = \kldiv{X}{B^t} = -\log S^t(\mu,\nu)$.
+\end{lemma}
+\begin{proof}
+Recall that $\Pr[F^t_{t+1}=r] = S^t(\mu,\nu)$. 
+Since $X$ is obtained from $F^t$ by
+conditioning on $F^t_{t+1}=r$, the equality
+criteria of \autoref{lem:klcond} are
+fulfilled and thus $\kldiv{X}{F^t}=-\log S^t(\mu,\nu)$.
+The derivation of $\kldiv{X}{B^t}$ is
+identical as per \autoref{lem:xbackwards}(i).
+\end{proof}
+
+\subsection{Longer random walks}
+\label{sec:zdef}
+Let $J$ be an integer valued random variable taking
+the values $\set{1,2,\ldots,t}$, each with equal probability. For each fixing
+$j$ of $J$ we perform a random walk $Z\emid J=j$ on 
+$\OC$ that evolves
+in time steps $-1,0,1,\ldots,t,t+1,t+2,t+3$ as follows.
+
+The random walk starts at $r$ and for each time step 
+$-1\le i <j$, proceeds according to the
+transition kernel $\dist(X_{i+1}\emid X_{i})$. At time step
+$j$, the random walk proceeds according to 
+$\dist(X_{j-1}\emid X_{j})$ and in time steps 
+$j< i \le t+3$ proceeds according to the transition kernel 
+$\dist(X_{i-1}\emid X_{i-2})$. We view $Z$ as a joint random
+variable $Z=(Z_{-1},Z_0,\ldots,Z_{t+3})$, where $Z_i$ denotes
+the location of the random walk at time step $i$.
+
+\begin{lemma}
+\label{lem:ydist}
+For $-1\le i\le j$, we have 
+$\dist(Z_i\emid J=j) = \dist(X_i)$ and for 
+$j< i \le t + 3$,
+$\dist(Z_i\emid J=j) = \dist(X_{i-2})$.
+\end{lemma}
+\begin{proof}
+This follows from the fact that 
+\begin{align*}
+\dist(F^t \emid F^t_{t+1} = r) = \dist(X)
+    = \dist(B^t \emid B^t_{-1} = r)
+\end{align*}
+and that $X$ is an actual random walk (i.e., Markovian)
+on $\OC$.
+
+To be more explicit, we have $\dist(X_i)=\dist(Z_i)$ for 
+$i\le j$ since both $X$ and $Z$ start at $r$ in time step 
+$-1$ and evolve according to the transition kernel
+$\dist(X_{i+1}\emid X_i)$ for $i=-1,\ldots, j-1$. Since
+$\dist(X_j) = \dist(Z_j)$ and $Z$ proceeds according to
+$\dist(X_{i-1}\emid X_j)$ at time step $j$, by 
+\autoref{lem:xbackwards}, $\dist(X_{j-1}) = \dist(Z_{j+1})$.
+%
+Finally in time steps $i>j$, we have $\dist(Z_i)=\dist(X_{i-2})$
+since $\dist(X_{j-1}) = \dist(Z_{j+1})$ and $Z$ proceeds according
+to $\dist(X_{i-1}\emid X_{i-2})$.
+\end{proof}
+
+From this we can deduce that $Z$ always
+ends up in $r$ at time step $t+3$. We next
+argue that if $X$ does not diverge too much from
+the reference random walk $F^t$, then $Z$ does 
+not diverge too much from $F^{t+2}$.
+
+\begin{lemma}
+\label{lem:zdiv}
+We have
+\begin{align*}
+\kldiv{Z\emid J}{F^{t+2}} = \frac{t+2}{t}\kldiv{X}{F^t} 
+  &- \frac{1}{t}\nparen{
+    \kldiv{X_0}{F^t_0} + 
+    \kldiv{X_{t+1}\emid X_{t}}{F^t_{t+1}\emid F^t_t}
+  }\\
+  &- \frac{1}{t}\nparen{
+    \kldiv{X_t}{B^t_t} + 
+    \kldiv{X_{-1}\emid X_{0}}{B^t_{-1}\emid B^t_0}
+  }.
+\end{align*}
+\end{lemma}
+\begin{proof}
+For a fixing $j$ of $J$, we have 
+\begin{align*}
+\kldiv{Z\emid J=j}{F^{t+2}} 
+    &= \sum_{i=-1}^{j-1}\kldiv{X_{i+1} \emid X_{i}}
+        {F^{t+2}_{i+1} \emid F^{t+2}_{i}}
+    + \kldiv{X_{j-1}\emid X_j}{F^{t+2}_{j+1}
+                    \emid F^{t+2}_{j}}\\
+    &\quad\quad
+        + \sum_{i=j+1}^{t+2}\kldiv{X_{i-1}\emid X_{i-2}}
+      {F^{t+2}_{i+1}\emid F^{t+2}_{i}},
+\end{align*}
+where we have used the chain rule for divergence (cf.\ 
+\autoref{lem:klchain}), the fact that $Z\emid J=j$ and 
+$F^{t+2}$ are Markovian and \autoref{lem:ydist}. 
+Recalling that $F^t$ and $B^t$ evolve according 
+to $S$ in time steps $0,1,\ldots,t-1$, and 
+$\dist(F^t_{t+1}\emid F^t_t)
+    =\dist(F^{t+2}_{t+3}\emid F^{t+2}_{t+2})$,
+we write
+\begin{align*}
+\kldiv{Z\emid J=j}{F^{t+2}}
+  &= \sum_{i=-1}^t \kldiv{X_{i+1}\emid X_i}{F^t_{i+1}\emid F^t_i}\\
+     &\qquad\qquad
+     + \kldiv{X_{j-1}\emid X_j}{B^t_{j-1}\emid B^t_{j}}
+     + \kldiv{X_j\emid X_{j-1}}{F^t_{j}\emid F^t_{j-1}}\\
+  &= \kldiv{X}{F^t} 
+    + \kldiv{X_{j-1}\emid X_j}{B^t_{j-1}\emid B^t_{j}}
+    + \kldiv{X_j\emid X_{j-1}}{F^t_{j}\emid F^t_{j-1}}
+\end{align*}
+again by the chain rule for divergence 
+(\autoref{lem:klchain}) and the
+fact that $X$ and $F^t$ are Markovian. Now taking 
+an expectation over all $j\in \supp(J)$, we have
+\begin{align*}
+\kldiv{Z\emid J}{F^{t+2}} 
+  &= \frac{1}{t}\sum_j\kldiv{Z\emid J=j}{F^{t+2}}\\
+  &= \kldiv{X}{F^t} 
+    + \frac{1}{t}\sum\nparen{\kldiv{X_{j-1}\emid X_j}
+                            {B^t_{j-1}\emid B^t_{j}}
+    + \kldiv{X_j\emid X_{j-1}}{F^t_{j}\emid F^t_{j-1}}}\\
+  &= \kldiv{X}{F^t}
+  + \frac{\kldiv{X}{B^t} 
+      - \kldiv{X_t}{B^t_t}
+      - \kldiv{X_{-1}\emid X_0}{B^t_{-1}\emid B^t_0}
+    }{t}\\
+  &\qquad\qquad\qquad\;+ \frac{\kldiv{X}{F^t} 
+      - \kldiv{X_0}{F^t_0}
+      - \kldiv{X_{t+1}\emid X_t}{F^t_{t+1}\emid F^t_t}
+    }{t}.
+\end{align*}
+Since $\kldiv{X}{B^t} = \kldiv{X}{F^t}$ by 
+\autoref{lem:xvsf}, collecting the $\kldiv{X}{F^t}$
+terms we finish the proof.
+\end{proof}
+
+Finally, we lower bound the negative terms in the statement
+of \autoref{lem:zdiv}.
+\begin{lemma}
+\label{lem:negterms}
+We have
+\begin{align}
+\kldiv{X_0}{F^t_0}
+    + \kldiv{X_{-1}\emid X_{0}}{B^t_{-1}\emid B^t_0}
+    &\ge \ryent{2}{\mu} \defeq -\log \lnorm{\mu}{2}^2,
+        \text{ and} \label{teq:negterm1}\\
+\kldiv{X_t}{B^t_t}
+    + \kldiv{X_{t+1}\emid X_{t}}{F^t_{t+1}\emid F^t_t}
+    &\ge \ryent{2}{\nu} \defeq -\log \lnorm{\nu}{2}^2,
+        \label{teq:negterm2}
+\end{align}
+where $\ryent{2}{\cdot}$ denotes the 
+second order Rényi entropy. 
+%If the inequalities hold
+%with equality simultaneously, then $\mu = \nu$ and 
+%$\mu$ is an eigenvector of $S$.
+\end{lemma}
+\begin{proof}
+We only prove the first inequality as the
+second one is symmetric. By \autoref{lem:xdist},
+we have
+\begin{align*}
+\kldiv{X_0}{F^t_0} &= 
+  \sum_{x\in \Omega}
+      \frac{\mu(x)S^{t}(x,\nu)}{S^t(\mu,\nu)}
+      \log \frac{S^{t}(x,\nu)}{S^t(\mu,\nu)}
+          \quad\text{ and}\\
+\kldiv{X_{-1}\emid X_{0}}{B^t_{-1}\emid B^t_0} &=
+  \sum_{x\in \Omega}
+      \frac{\mu(x)S^{t}(x,\nu)}{S^t(\mu,\nu)}
+      \log\frac{1}{\mu(x)}.
+\end{align*}
+Let $\Psi=\supp(X_0)$. By adding the two terms we get
+\begin{align}
+\kldiv{X_0}{F^t_0}+
+\kldiv{X_{-1}\emid X_{0}}{B^t_{-1}\emid B^t_0} &=
+  -\sum_{x\in\Psi}
+      \frac{\mu(x)S^{t}(x,\nu)}{S^t(\mu,\nu)}
+      \log\frac{\mu(x)S^t(\mu,\nu)}{S^{t}(x,\nu)}
+          \nonumber\\
+  &\ge -\log \sum_{x\in\Psi}\frac%
+    {\mu(x)^2 S^{t}(x,\nu)S^t(\mu,\nu)}
+      {S^t(\mu,\nu)S^{t}(x,\nu)}
+          \label{eq:norm-u-jens}\\
+  &=   -\log \sum_{x\in\Psi} \mu(x)^2
+      \nonumber\\
+  &\ge -\log \sum_{x\in\Omega} \mu(x)^2\;,
+      \label{eq:psivsomega}
+\end{align}
+where the first inequality is by concavity of 
+$z\mapsto\log z$
+and the second inequality is true as the 
+summands are nonnegative.
+\end{proof}
+
+\subsection{Combining the inequalities}
+\label{sec:bd-final}
+\begin{proof}[Proof of \autoref{thm:blakley-dixon}]
+Note that $Z_{-1}$ is fixed to $r$ by definition 
+(cf.\ \autoref{sec:zdef}) and $Z_{t+3}$ is fixed to $r$
+by \autoref{lem:ydist}. Therefore by 
+\autoref{lem:klcond} we have
+\begin{align}
+-\log S^{t+2}(\mu,\nu)
+  &\le \kldiv{Z}{F^{t+2}} \label{eq:kvk2} \\
+  &= \kldiv{Z\emid J}{F^{t+2}} - \muti{J}{Z}
+      \label{eq:ztozcondj}\\
+  &\le \kldiv{Z\emid J}{F^{t+2}}
+      \label{eq:mutrelax}\\
+  &\le \frac{t+2}{t}\kldiv{X}{F^t} 
+      + \frac{\log\lnorm{\mu}{2}^2 + \log\lnorm{\nu}{2}^2}
+            {t}.
+        \nonumber
+\intertext{%
+Here \autoref{eq:ztozcondj} follows from the chain rule 
+for the divergence (\autoref{lem:klchain}) 
+and the definition of mutual information 
+(cf.\ \autoref{eq:muti-def}),
+\autoref{eq:mutrelax} follows from
+the nonnegativity of mutual information and
+the last line follows from 
+\autoref{lem:zdiv} and \autoref{lem:negterms}.
+Plugging in $\kldiv{X}{F^t}=-\log S^t(\mu,\nu)$, provided by 
+\autoref{lem:xvsf}, we obtain}
+  -\log S^{t+2}(\mu,\nu)
+    &\le -\frac{t+2}{t}\log S^t(\mu,\nu) 
+         + \frac{\log\lnorm{\mu}{2}^2 + \log\lnorm{\nu}{2}^2}
+            {t}.
+        \nonumber
+\end{align}
+Arranging, we get
+\begin{align*}
+\lnorm{\mu}{2}^2 \lnorm{\nu}{2}^2\iprod{\nu}{S^{t+2}\mu}^t
+  \ge
+    \iprod{\nu}{S^t\mu}^{t+2}
+\end{align*}
+and substituting $\mu = u/\lone{u}$, 
+$\nu = v/\lone{v}$, and recalling that $u,v$ 
+are unit vectors, we obtain
+\begin{align}
+\iprod{v}{S^{t+2}u}^t 
+&\ge \iprod{v}{S^t u}^{t+2}, \text{ i.e.,} \nonumber\\
+m_{t+2} &\ge m_t^{1+2/t}\label{eq:absclaim1}.
+\end{align}
+By applying this inequality iteratively, we get
+$\iprod{v}{S^{k}u}^t\ge\iprod{v}{S^t u}^{k}$ or
+written differently
+$m_k^{1/k}\ge m_t^{1/t}$
+as long as $k>t$ and $k,t$ have the same parity.
+
+Next we characterize the equality conditions of 
+\autoref{eq:absclaim1}. Let us verify the
+`if' direction of the statement. 
+Clearly if $\iprod{v}{S^ku}=0$ then we have $\iprod{v}{S^ku} = \iprod{v}{S^tu}$ by the
+first part of the theorem and the fact that 
+$\iprod{v}{S^tu}\ge 0$. If $S^2u = \lambda^2 u$, 
+then $m_{2t} = \lambda^{2t}$ and if $Su=\lambda v$ and $Sv=\lambda u$, then $m_{2t+1}=\lambda^{2t+1}$, therefore
+in both $t$ even and $t$ odd cases 
+the inequality holds with equality.
+
+Conversely, if 
+$0\neq \iprod{v}{S^{k+2}u}=\iprod{v}{S^ku}$, then the
+inequalities
+\eqref{eq:norm-u-jens}, 
+\eqref{eq:psivsomega},
+\eqref{eq:kvk2},
+ and
+\eqref{eq:ztozcondj} must hold with equality.
+Combining the assumption that \autoref{eq:psivsomega}
+and \eqref{eq:norm-u-jens} 
+hold with equality with the strict concavity of
+$z\mapsto \log z$ and Jensen's lemma, we get that 
+$S^t\nu = \lambda_1\mu + \sigma_1$ for some $\lambda_1\le 1$ and $\sigma_1\in\reals^{\Omega}_{+}$ satisfying 
+$\supp(\sigma_1)\cap\supp(\mu)=\emptyset$. This also means that $\Pr[X_0 = x] = \mu(x)^2/\lnorm{\mu}{2}^2$ for $x\in \Omega$ and a similar and symmetrical argument shows that
+$\Pr[X_t = x] = \nu(x)^2/\lnorm{\nu}{2}^2$ for 
+$x\in\Omega$.
+Assuming \autoref{eq:ztozcondj} holds 
+with equality leads to $\muti{Z}{J}=0$, which in turn
+shows that $\dist(X_i)=\dist(X_{i+2})$ for 
+$i=0,\ldots,t-2$. 
+Let 
+$X^{k+2} \defeq \nparen{F^{t+2}\emid F^{t+2}_{t+3}=r}$.
+From our assumption $0\neq \iprod{v}{S^{k+2}u}=\iprod{v}{S^ku}$ we conclude that $\dist(Z)=\dist(X^{t+2})$
+as $X^{t+2}$ is the minimally divergent distribution from $F^{t+2}$ among distributions on walks ending at state $r$. Since 
+$\dist(X^{t+2}_2)=\dist(X^{t+2}_0)=\dist(X_0)$, and $S^t\nu=\lambda_1\mu+\sigma_1$ we get that 
+$S^2\mu = \lambda_2 \mu + \sigma_2$  for some $\lambda_2\le 1$ and $\sigma_2\in\reals^{\Omega}_{+}$ satisfying 
+$\supp(\sigma_2)\cap\supp(\mu)=\emptyset$. Now we will show that it must be that $\sigma_2=0$. Suppose for sake of contradiction that $\sigma_2(z)>0$ for some $z\notin \supp(\mu)$. There exists $x,y\in\Omega$ so that $\mu(x)S(x,y)S(y,z)>0$. If $y\in\supp(X_1)$ then adding to a walk $w\in \supp(X)$ with $w_1=y$ the loop $(y,z)(z,y)$
+we obtain a length $t+2$ walk which is not in the support of $X^{t+2}$ as $\dist(X^{t+2}_2)=\dist(X_2)=\dist(X_0)$,
+which contradicts the fact that 
+$X^{t+2}$ is defined as $F^{t+2}\emid F^{t+2}_{t+3}=r$.
+If on the other hand $y\notin\supp(X_1)$, 
+adding the loop $(x,y)(y,x)$ to a walk with $w_0=x$ 
+leads to a walk which is not in the support of $X^{t+2}$, 
+which is a contradiction. Having established $S^2\mu = \lambda \mu$, we complete the proof for even $t$
+by recalling that $\dist(X_0)=\dist(X_t)$ therefore $\mu=\nu$. For $t$ odd, the last argument shows that
+ $S\mu = \lambda_3\nu + \sigma_3$ for some $\lambda_3\le 1$ and $\sigma_3\in\reals^{\Omega}_{+}$ satisfying 
+$\supp(\sigma_3)\cap\supp(\mu)=\emptyset$. 
+It remains to show that $\sigma_3=0$ 
+by using the assumption that $\dist(Z)=\dist(X^{t+2})$. Suppose $\sigma_3(y)>0$ for some $y\notin\supp(\nu)$. There exists $x\in\Omega$ such that $\mu(x)S(x,y)>0$. Adding the loop $(x,y)(y,x)$ to
+a walk $w$ with $w_{t-1}=x$ leads to a length $t+2$ walk
+which is not in the support of $X^{t+2}$. A symmetrical
+argument shows that $\lambda'\mu = S\nu$. This completes the proof.
+\end{proof}

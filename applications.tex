@@ -1,0 +1,570 @@
+% !TeX root = heatdiscrete.tex
+\section{Randomized computational models}
+\label{sec:applications}
+In this section we show the connection between
+\autoref{thm:blakley-dixon}, \autoref{thm:main} and 
+the randomized communication and query complexities 
+of the Hamming distance problem.
+
+\subsection{Communication complexity}
+In a two player communication problem the players, 
+named Alice and Bob, receive separate inputs, 
+respectively $x\in \mathcal{X}$ and $y\in \mathcal{Y}$, 
+and they communicate in order to compute the value 
+$f(x,y)$ of a function
+$f\colon \mathcal{X}\times \mathcal{Y}\to\binary$ 
+(known to both players). 
+In an $r$-round protocol, the players can take at most 
+$r$ turns alternately sending each other a message 
+(that is, a bit string) and the last player to receive 
+a message declares the output of the protocol.
+A protocol can be {\em deterministic} or {\em randomized}; 
+in the latter case the players can base their actions on 
+a common random source and we measure the 
+{\em error probability}: the maximum over inputs 
+$(x,y)\in \mathcal{X}\times\mathcal{Y}$, of the probability 
+that the output of the protocol differs from $f(x,y)$. 
+The {\em communication cost} of a protocol is the maximum, 
+over the inputs and the random string, of the total number 
+of bits sent between the players.
+For a function 
+$f\colon \mathcal{X}\times\mathcal{Y}\to\binary$, 
+an integer $r$ and $\delta\in[0,1]$, we denote by 
+$R^r_{\delta}(f)$ the minimum over all protocols
+for $f$ having $r$-rounds and error probability at most 
+$\delta$, of the communication cost incurred. We define 
+$R_{\delta}(f)$ similarly, but we take the maximum over 
+$\delta$-error protocols with no restriction on the number 
+of rounds it uses.
+
+In the $k$-Hamming distance problem, denoted $\Ham^n_k$,
+the players receive length-$n$ bit strings, respectively 
+$x,y\in\cube$, and are required determine if 
+$\lone{x-y}\le k$ or not.
+There is a well known one-round communication protocol
+which accomplishes this with error probability $\delta$ 
+by communicating $O(k\log\nparen{k/\delta})$ bits.
+
+\begin{theorem}
+[e.g., Huang, Shi, Zhang and Zhu \cite{HuangSZZ2006}]
+\label{thm:ub}
+It holds that $$R^1_\delta(\Ham^n_k) = 
+O(\min\set{k\log\nparen{k/\delta}, k\log (n/k)}).$$
+\end{theorem}
+
+Highly related to the $\Ham^n_k$ is the $k$-disjointness 
+problem $\Disj^n_k$, wherein the players each receive a 
+$k$-subset of $[n]$ and their goal is to determine if their 
+sets intersect.
+Notice that $\Disj^n_k$ can be seen as a promise version of
+$\Ham^n_{2k-2}$ where each player is guaranteed to have a string
+with Hamming weight $k$: the sets are disjoint if and only if the
+Hamming distance between the characteristic vectors of the sets
+is more than $2k-2$. Therefore any upper bound for the $\Ham^n_k$ 
+carries over to $\Disj^n_k$ and any lower bound for $\Disj^n_k$
+carries over to $\Ham^n_k$.
+Around 1993, 
+Håstad and Wigderson \cite{HastadW2007} showed that
+there is a more efficient protocol for $\Disj^n_k$ than that implied 
+by \autoref{thm:ub}, which communicates only $O(k)$ bits, but over
+$O(\log k)$ rounds.
+
+On the lower bounds side, the result of \cite{KalyanasundaramS1992}
+implies that $\Omega(k)$ bits is needed for these problems even
+if one uses arbitrarily large number of round protocols.
+In \cite{BuhrmanGMW2012} it was shown that
+any 1-round protocol for $\Disj^n_k$ needs to communicate
+at least $\Omega(k \log k)$ bits when $k^2<n$
+(this result was proven later in \cite{DasguptaKS12} also).
+In Theorem~3.2 of \cite{Saglam2011}, an $\Omega(k\log(1/\delta))$
+bound for $1$-round complexity of $\Disj^n_k$ was shown even 
+when Bob receives just one element (i.e., the indexing problem) 
+for $k<\delta n$ and a 
+slightly more general result was shown in \cite{JayramW2011}.
+Finally in \cite{SaglamT2013} the communication complexity
+of $\Disj^n_k$ was settled:
+\begin{align*}
+R^r_{1/3}(\Disj^n_k)=\Theta(k\log^{(r)}k)
+\end{align*}
+for $1\le r \le \log^*k$ and $k^2<n$.
+Their upper bound solves the disjointness problem with 
+error probability at most $1/\exp k + 1/\exp^{(r)}(c\log^{(r)}k)$ 
+for any $c>1$ by communicating
+$O(k \log^{(r)} k)$ bits over $r$ rounds. In fact bulk of the bits
+is sent in the first round and the rest of the rounds
+amount to an $O(k)$ bits of communication. Taking $r=\log^* k$,
+this leads to an $O(k)$ bits protocol with error probability 
+that is exponentially small in $k$.
+Their lower bound shows that at least one
+message of size 
+$\Omega(k\log^{(r)} k)$ bits needs to be sent by any 
+$r$-round protocol, even if it has error probability $1/3$.
+Prior to this work, this lower bound provided the strongest lower
+bound for $\Ham^n_k$ also, along with the incomparable bound of 
+$\Omega(k\log (1/\delta))$ due to \cite{BlaisBG2014}
+which holds for any number of rounds, which we discuss shortly.
+
+\input{hamvsdisj}
+
+To summarize the above results, the 1-round communication 
+complexity of both $\Disj^n_k$ and $\Ham^n_k$ is 
+$\Theta(k\log(k/\delta))$ by 
+\cite{BuhrmanGMW2012, Saglam2011, JayramW2011} and 
+\cite{HuangSZZ2006}. We know that $\Disj^n_k$ can be solved 
+much more efficiently if one is allowed multiple rounds:
+firstly the $\log k$ factor can be removed \cite{HastadW2007} 
+and secondly the error probability can be brought down to 
+$\exp(-k)$, by using no more than $\log^* k$ rounds 
+\cite{SaglamT2013}. It is an interesting question whether 
+similar efficiency improvements can be obtained for $\Ham^n_k$ 
+also, by using multiple rounds.
+The first separation of $\Disj^n_k$ and $\Ham^n_k$ was proven
+in \cite{BlaisBG2014}, which shows that $\Omega(k\log(1/\delta))$
+lower bound holds for any protocol solving $\Ham^n_k$. 
+Therefore in $\Ham^n_k$, we get no improvements in error probability
+by interactive communication. It remained an open 
+question whether {\em any} improvement can be made 
+at all to the 1-round protocol by communicating interactively.
+In this work we answer this question negatively: 
+
+\begingroup
+\def\thetheorem{\ref{thm:klogk}}
+\begin{theorem}[restated]
+For $k^2<\delta n$ we have 
+$R_{\delta}(\Ham^n_k) = \Omega(k\log (k/\delta))$.
+The bound applies even to protocols that may
+output an arbitrary answer when $\lone{x-y} \notin \set{k-2, k,k+2}$.
+\end{theorem}
+\addtocounter{theorem}{-1}
+\endgroup
+Before we proceed with proving \autoref{thm:klogk}, let us
+first warm up by showing that \autoref{thm:blakley-dixon} 
+implies an  $\Omega(k\log(1/\delta))$ lower bound on 
+$R_\delta(\Ham^n_k)$.
+To do so, let us review the so called {\em corruption bound}
+method. Let  $f\colon\mathcal{X}\times\mathcal{Y}\to\binary$ 
+be the function the players would like to compute with 
+Alice having received $x\in \mathcal{X}$ and Bob $y\in \mathcal{Y}$. 
+For a protocol $P$ for $f$, define the matrix 
+$A_P\colon\mathcal{X}\times\mathcal{Y}\to[0,1]$ 
+such that $A_P(x,y)$ is the probability
+that the protocol outputs 1 on input $(x,y)$.
+It is well known and not difficult to see that
+if $P$ has communication cost $c$, then $A_P$ is the
+average of matrices each of which is the sum of at most
+$2^c$ rank 1 matrices $u v^\transpose$ with 
+$u\in \binary^\mathcal{X}$ and $v\in\binary^\mathcal{Y}$.
+Therefore to show the communication cost of a protocol
+$P$ is more than $c$, it suffices to argue $A_P$ lies
+outside $2^c$ times the polytope
+\begin{align*}
+\mathcal{T}\defeq 
+\conv\set{uv^\transpose\mid 
+u\in\binary^\mathcal{X}, v\in\binary^\mathcal{Y}},
+\end{align*}
+where $\conv$ denotes the convex hull. By convexity, 
+$A_p$ lies outside of $2^c\mathcal{T}$ if and only if there 
+is a hyperplane (with normal $H$) separating the two; 
+namely that $\iprod{A_P}{H}>2^c\iprod{R}{H}$ for all 
+vertices $R$ of the polytope $\mathcal{T}$.
+
+Let $\mu_k\colon\cube\times\cube\to\realspos$ be the distribution
+on pairs $(x,y)$ obtained as follows. Sample $x$ uniformly at random
+and obtain $y$ by flipping $k$ coordinates of $x$ chosen uniformly 
+at random and with replacement (here if a coordinate gets flipped 
+twice it reverts back to its initial value).
+\begingroup
+\def\thetheorem{\ref{thm:klogdelta}}
+\begin{theorem}[restated]
+For $k^2<\delta n$ we have 
+$R_{\delta}(\Ham^n_k) = \Omega(k\log (1/\delta))$.
+The bound applies even to protocols that may
+output an arbitrary answer when $\lone{x-y} \notin \set{k,k+2}$.
+\end{theorem}
+\addtocounter{theorem}{-1}
+\endgroup
+\begin{proof}
+Suppose we have a randomized protocol for $\Ham^n_k$ with 
+error probability $\delta$. Form the matrix $A$, where
+$A(x,y)$ is the probability that the protocol reports
+$\lone{x-y}\le k$ on input $(x,y)$.
+
+Set $H = \mu_k - \mu_{k+2}/(3\delta)$. Let us first argue that
+$\iprod{A}{H}\ge 1/3$. Note that when we sample $k$ elements 
+from $[n]$ uniformly at random, by a union bound, the probability
+that there is a collision is at most $\binom{k}{2}/n$, therefore 
+$\mu_k$ chooses a pair $(x,y)$ at distance $k$ with probability 
+at least $1-\binom{k}{2}/n$.
+Hence,
+$\iprod{A}{\mu_k} 
+   \ge (1-\delta)(1-\binom{k}{2}/n)
+     > 1-3\delta/2$,
+where in the last step we used $k^2< \delta n$.
+Similarly, we have $\iprod{A}{\mu_{k+2}} \le 
+                    \delta + \binom{k+2}{2}/n \le 3\delta/2$,
+thus it follows that $\iprod{A}{H}\ge 1/3$ for $\delta \le 1/9$.
+
+Next we argue that $\iprod{R}{H}< (3\delta)^{k/2}$ for any 
+$R=uv^\transpose$ with $u,v\in\cube$. If 
+$\iprod{R}{\mu_k}<(3\delta)^{k/2}$, we are done as 
+$\iprod{R}{\mu_{k+2}}\ge 0$ and is a negative term in 
+$\iprod{R}{H}$. If $\iprod{R}{\mu_k}\ge (3\delta)^{k/2}$
+on the other hand,
+observing $\iprod{R}{\mu_k}=\iprod{v}{W^k u}/2^n$,
+where $W$ is the normalized adjacency matrix of the Hamming cube,
+we have by \autoref{thm:blakley-dixon}
+\begin{align*}
+\nparen{\frac{\lnorm{u}{2}\lnorm{v}{2}}{2^n}}^{2/k}
+\iprod{v}{W^{k+2}u} \ge 
+\iprod{v}{W^{k}u}^{1+2/k}.
+\end{align*}
+Note $\lnorm{u}{2}\lnorm{v}{2}\le 2^n$ since $u,v$ are 0-1 vectors,
+therefore 
+$\iprod{R}{\mu_{k+2}}\ge 3\delta\iprod{R}{\mu_{k}}$
+and hence $\iprod{R}{H}\le 0$. In either case we have shown
+that $\iprod{R}{H} < (3\delta)^{k/2}$. This implies an 
+$\log((3\delta)^{-k/2} / 3) = \Omega(k\log(1/\delta))$ bits 
+lower bound on $R_\delta(\Ham^n_k)$.
+\end{proof}
+Interestingly, \autoref{thm:klogk} cannot be proved by a direct 
+application of the corruption method described above. 
+If we assume that the protocol
+is supposed to output 1 on inputs $\lone{x-y}\le k$, then there are 
+vertices of the polytope $\mathcal{T}$ for which 
+the $\Omega(k\log(1/\delta))$ bound of 
+\autoref{thm:klogdelta} is tight. If we assume that the protocol
+is supposed to output 1 on inputs $\lone{x-y}> k$ on the other
+hand, no bound above $\Omega(k)$ can be obtained, as there are
+vertices for which this is tight.
+If we insist however that the protocol outputs 1 for $\lone{x-y}=k$
+and 0 for $\lone{x-y}\in\set{k-2,k+2}$ then a protocol with cost
+smaller than $O(k\log (k/\delta))$
+would be in violation of the near log-convexity principle we 
+established in \autoref{thm:main} as we argue next.
+Of course, if we had a $\delta$-error randomized protocol 
+$P$ for 
+$\Ham^{n+2}_k$ outputting 1 when $\lone{x-y}\in\set{k-2,k}$ 
+and 0 if $\lone{x-y}=k+2$ 
+(but without any guarantees for other types of inputs), then 
+given inputs $a,b\in\cube$ Alice and Bob can run $P$
+(say, in parallel)
+on instances $(00a, 00b)$ and $(00a, 11b)$ and declare 
+$\lone{a-b}=k$ if $P$ returns 1 on $(00a, 00b)$ and 
+0 on $(00a, 11b)$.
+This would lead to a protocol with twice the error probability
+and communication cost of $P$, deciding between $\lone{a-b}=k$,
+$\lone{a-b}=k-2$ and $\lone{a-b}=k+2$. The table below shows that
+$P$ outputting 1 on $(00a, 00b)$ and 0 on $(00a, 11b)$ implies
+$\lone{a-b}=k$ or at least one invocation of $P$ erred.
+
+\begin{center}
+\def\arraystretch{1.2}
+\begin{tabular}{rccc}
+Input       & $k-2$ & $k$  & $k+2$ \\\hline
+$(00a,00b)$ &   1   &  1   &  0  \\
+$(00a,11b)$ &   1   &  0   &  ? 
+\end{tabular}
+\end{center}
+
+\begin{proof}[Proof of \autoref{thm:klogk}]
+Suppose we have a $\delta$-error randomized protocol that 
+outputs 1 when $\lone{x-y} = k$ and 0 when 
+$\lone{x-y} = k-2$ or $\lone{x-y} = k+2$.
+ 
+Form the matrix $A$, where $A(x,y)$ is the probability 
+that the protocol reports that $\lone{x-y}= k$ on 
+input $(x,y)$. Let $\alpha_1,\alpha_2> 0$ be some reals so that
+\autoref{thm:main} implies
+$m_{t+2}\ge t^{\alpha_1}m^{1+2/t}$ or 
+$m_{t+2}m_{t-2}\ge \alpha_2{m_t}^2$ for $m_t$ 
+defined in statement of this theorem. 
+
+Set $H = \mu_{k} - (\mu_{k-2} + \mu_{k+2})/(6\delta)$.
+Let us argue first that $\iprod{A}{H}\ge 1/3$.
+One can verify that 
+$\iprod{A}{\mu_k}\ge 
+  (1-\delta)(1-\binom{k}{2}/n)> 1-3\delta/2$
+and $\iprod{A}{\mu_{k-2}} + \iprod{A}{\mu_{k-2}} < 3\delta$.
+Hence $\iprod{A}{H}\ge 1/3$ for $\delta \le 1/9$.
+
+We upper bound $\iprod{R}{H}$ for some rank-1
+matrix $R=uv^\transpose$ with 0-1 values. Let $W$ be
+the normalized adjacency matrix of the Hamming cube graph.
+Observe that $\iprod{R}{\mu_k} = \iprod{v}{W^ku}/2^n$.
+By \autoref{thm:main}, either 
+$\iprod{R}{\mu_{k+2}}\iprod{R}{\mu_{k-2}}
+\ge \alpha_2 \iprod{R}{\mu_k}^2$ or 
+\begin{align*}
+\nparen{\frac{\lnorm{u}{2}\lnorm{v}{2}}{2^n}}^{2/k}
+\iprod{R}{\mu_{k+2}}\ge k^{\alpha_1}\iprod{R}{\mu_{k}}^{1+2/k}.
+\end{align*}
+In the former case,
+\begin{align*}
+\frac{\iprod{R}{\mu_{k+2}}+\iprod{R}{\mu_{k-2}}}{2}\ge 
+\sqrt{\iprod{R}{\mu_{k+2}}\iprod{R}{\mu_{k-2}}}\ge
+\sqrt{\alpha_2}\iprod{R}{\mu_k},
+\end{align*}
+which implies that $\iprod{R}{H}<0$ whenever 
+$\delta<2\sqrt{\alpha_2}/6$ (recall $\alpha_2$ is a constant).
+In the latter case we get $\iprod{R}{H}<0$ unless
+$6\delta\iprod{R}{\mu_{k+2}} \le \iprod{R}{\mu_{k}}$, 
+which implies, 
+recalling $\lnorm{v}{2}\lnorm{u}{2}\le 2^n$,
+that $k^{\alpha_1}\iprod{R}{\mu_k}^{2/k}<6\delta$.
+From this we get
+\begin{align*}
+  \iprod{R}{H}\le \iprod{R}{\mu_k}\le
+  \nparen{\frac{6\delta}{k^{\alpha_1}}}^{k/2},
+\end{align*}
+and hence $\iprod{R}{H} < \nparen{\frac{6\delta}{k^{\alpha_1}}}^{k/2}$ 
+in every case and 
+$R_\delta(\Ham^n_k)=\Omega(k\log(k/\delta))$
+whenever $k^2<\delta n$.
+\end{proof}
+
+For a protocol $P$, denote by $\Pi=\Pi(x,y)$ the random variable 
+entailing all the messages communicated between the players 
+on input $(x,y)$.
+So far we have considered the communication cost of a protocol
+which is the maximum length of $\Pi$ over all inputs and the 
+configurations of the random source (these together determine 
+the value of $\Pi$). When a distribution $\mu$
+on the inputs is available, we may speak of
+a more refined notion of cost, {\em the internal information cost}, 
+for a protocol $P$ which is defined as
+\begin{align*}
+\mathsf{IC}_\mu(P)\defeq \muti{\Pi}{Y\emid X} + \muti{\Pi}{X\emid Y},
+\end{align*}
+where $(X,Y)\sim\mu$. Combining our 
+\autoref{thm:klogk} with a result of \cite{KerenidisLLRX2015}
+which relates information and communication costs of a protocol 
+under suitable circumstances, one
+can conclude that any randomized protocol for $\Ham^n_k$ has
+information cost $\Omega(k\log k)$ as well, under the distribution
+$\mu = (\mu_k+\mu_{k-2}+\mu_{k+2})/3$. However we note that instead 
+of using \autoref{thm:main} black-box,
+taking a closer look at the proof of \autoref{thm:blakley-dixon} 
+and not performing the relaxation provided in \autoref{lem:negterms},
+we get the following more directly.
+\begin{theorem}
+\label{thm:infocost}
+Let $P$ be a protocol outputting 1 on pairs $(x,y)$ having
+$\lone{x-y}=k$ with 
+probability $1-\delta$ and outputting 0 on pairs 
+$(x,y)$ having
+$\lone{x-y}\in\set{k-2,k+2}$ with probability $1-\delta$. 
+We have 
+$\mathsf{IC}_{\mu_k}(P)=\Omega(k\log (k/\delta))$.
+\end{theorem}
+
+Let us finally mention another highly related problem, 
+the so called the gap Hamming distance problem. 
+In $\Ghd^n_{k}$, each of the players receive a bit string,
+respectively $x,y\in\cube$, with the promise that either 
+$\lone{x-y}\le k$ or $\lone{x-y}\ge k + \sqrt{k}$.
+Their goal is to determine which is the case for any given input.
+In \cite{ChakrabartiR2012}, an $\Omega(k)$ lower bound
+for this problem was shown, which applies to protocols with any
+number of rounds.
+Here we conjecture an improvement to this bound
+and argue that it would follow from a natural analogue of
+\autoref{thm:main} for continuous time Markov chains, which
+we discuss in \autoref{sec:discussion}.
+\begin{conjecture}
+\label{conj:ghd}
+For $k<\delta n$, we have $R_\delta(\Ghd^n_k) 
+= \Omega(k \log(1/\delta))$.
+\end{conjecture}
+
+\subsection{Parity decision trees}
+\def\PD{\mathrm{PD}}
+\def\PS{\mathrm{PS}}
+In the parity decision tree model, we are given a string 
+$x\in\field_2^n$ and our goal is to determine whether 
+$x$ satisfies a fixed predicate
+$P\colon\field_2^n\to\binary$ by only making linear 
+measurements of the form $\iprod{x}{y}$ for some 
+$y\in \field_2^n$ we get to choose. Here, the inner product
+is over $\field_2^n$, and therefore we get a single bit 
+answer for every measurement we make.
+
+Such measurements can be identified by binary decision
+trees wherein each internal node is labeled by a
+$y\in\field_2^n$ denoting the linear measurement
+$\iprod{x}{y}$ we would make at that node and each leaf
+is labeled by a YES or a NO denoting the final decision we 
+arrive. Given such a tree and an $x$, the output of the 
+decision tree is obtained by a root to leaf walk, where at 
+each internal node $v$ with label $y_v$, 
+we perform the measurement 
+$\iprod{x}{y_v}$ and walk to the left child of $v$ if 
+$\iprod{x}{y_v}=0$ and to its right child if 
+$\iprod{x}{y_v}=1$. If a leaf node is reached, 
+the label of the node is taken as the answer of 
+the decision tree. Two quantities we are concerned with
+are the depth and the size (i.e., the total number of nodes)
+of the tree.
+
+A $\delta$-error randomized decision tree is a distribution
+$\nu$ over decision trees such that for any fixed $x$, 
+the sampled decision tree outputs the correct answer with 
+probability at least $1-\delta$, where the randomness is over 
+the choice of the decision tree from $\nu$. 
+The depth and the size of a randomized decision tree can be 
+taken as the maximum over the decision trees in the support 
+of $\nu$ (here, one can also take the average depth or size also;
+our result on decision tree size actually lower bounds this 
+potentially smaller quantity).
+
+For a predicate $P\colon\field_2^n\to\binary$, let 
+$\PD_\delta(P)$ be the minimum, over all randomized decision 
+trees $T$ computing $P$ with probability $1-\delta$, of the 
+depth of $T$.
+Let $\PS_\delta(P)$ be the minimum, over all randomized decision 
+trees $T$ computing $P$ with probability $1-\delta$, of the 
+size of $T$. The following inequalities are immediate
+\begin{align}
+  R_\delta(P\circ\oplus)&\le 2\PD_\delta(P)\label{eq:rvspd},\\
+  \log\PS_\delta(P)&\le \PD_\delta(P)\nonumber,
+\end{align}
+where $P\circ \oplus$ is the two player communication game 
+in which the two players are given strings $x,y\in\field_2^n$ 
+and are required to calculate $P(x+y)$. 
+We remark that $\log \PS_\delta$ is incomparable to $R_\delta$ 
+in general.
+
+Here we study the predicate $H^n_k$ which equals 1 if 
+and only if the Hamming weight of its input is precisely $k$. 
+By \autoref{eq:rvspd} and a padding argument similar to the 
+one we gave before the proof of \autoref{thm:klogk}, each lower 
+bound for $\Ham^n_k$ listed in \autoref{table:hamvsdisj} applies 
+to $\PD_\delta(H^n_k)$ as well. In \cite{BlaisK2012} another 
+direct $\Omega(k)$ bound for $\PD_\delta(H^n_k)$ was shown. In 
+\cite{BhrushundiCK2014}, showing an $\Omega(k\log k)$ lower bound 
+to a variant of $\PD_\delta(H^n_k)$ to obtain tight bounds for 
+$k$-linearity problem (see \autoref{sec:proptest}) was suggested. 
+Finally, our \autoref{thm:klogk} shows that 
+$\PD_\delta(H^n_k)=\Omega(k\log(k/\delta))$, which is tight. 
+Next we show the same bound holds even for $\log \PS_\delta(H^n_k)$.
+
+\begingroup
+\def\thetheorem{\ref{thm:paritysize}}
+\begin{theorem}[restated]
+For $k^2<\delta n$, 
+$\log \PS_\delta(H^n_k)=\Omega(k\log(k/\delta))$.
+\end{theorem}
+\addtocounter{theorem}{-1}
+\endgroup
+\begin{proof}
+\def\f{\field_2^n}
+The proof is very similar to that of \autoref{thm:klogk}, so we only 
+describe the differences.
+
+Let $T$ be a $\delta$-error randomized parity decision tree computing
+$H^n_k$. Form $A\colon\f\to[0,1]$ so that $A(x)$ is the probability 
+$T$ outputs 1 on input $x\in\f$.
+Define the polytope
+\begin{align*}
+\mathcal{P}\defeq\conv
+\set{x\mapsto \indicate{}[Bx = c]\mid B\in\field_2^{n\times n}, c\in\f}
+\end{align*}
+whose vertices are indicator functions for affine subspaces of $\f$.
+Given a randomized parity decision tree, 
+for each fixing of the randomness,
+the set of inputs that end up in
+a particular leaf of it is an affine subspace in $\f$. Therefore if
+$T$ has at most $s$ leaves, then $A$ is inside $s\mathcal{P}$.
+It remains to demonstrate a hyperplane
+with normal $H$ so that 
+$\iprod{A}{H}>s\iprod{V}{H}$ for any vertex $V$ of the polytope 
+$\mathcal{P}$ for $s=\exp \Omega(k\log(k/\delta))$.
+
+Let $\mu_k$ be a distribution on $\f$ obtained as follows. 
+Start with the $0$ vector, and flip a coordinate chosen 
+uniformly at random with replacement $k$ times. 
+Here, flipping a coordinate an even number of times leaves it 
+as $0$.
+Set $H= \mu_k - (\mu_{k-2}+\mu_{k+2})/(6\delta)$.
+
+First observe that 
+$\iprod{A}{\mu_k}>(1-\delta)(1-\binom{k}{2}/n)>1-3\delta/2$
+and $\iprod{A}{\mu_{k+2}}+ \iprod{A}{\mu_{k-2}}<3\delta$ so
+$\iprod{A}{H}\ge 1/3$ for $\delta\le 1/9$.
+Next we would like to upper bound $\iprod{V}{H}$ for an indicator
+function $V$ of an affine subspace $\setbuilder{x\in\f}{Bx=c}$.
+The key observation is
+\begin{align}
+\iprod{V}{\mu_k} = \iprod{\indicate{c}}{S^k\indicate{0}}
+\label{eq:chi}
+\end{align}
+where $S$ is a stochastic matrix describing the following transition:
+For any $x\in\f$, sample a column $y$ of $B\in\field_2^{n\times n}$ 
+uniformly at random and transition to $x+y$. 
+Namely, the right hand side of \autoref{eq:chi} describes the following
+probability.
+We start with the 0 vector in $\f$ and in each time step sample a 
+uniform random column $y$ of $B$ and add $y$ to the current state. 
+We measure the probability of reaching $c\in\f$ at time step $k$. 
+Having observed \autoref{eq:chi}, and that 
+$\lnorm{\indicate{0}}{2} = \lnorm{\indicate{c}}{2} = 1$,
+the rest of the proof is identical to that of \autoref{thm:klogk}: 
+by \autoref{thm:main}, we either have 
+\begin{align*}
+\iprod{\indicate{c}}{S^{k+2}\indicate{0}}
+\iprod{\indicate{c}}{S^{k-2}\indicate{0}}\ge
+  \alpha_2 \iprod{\indicate{c}}{S^k\indicate{0}}^2
+\end{align*}
+or
+\begin{align*}
+\iprod{\indicate{c}}{S^{k+2}\indicate{0}}
+\ge k^{\alpha_1} \iprod{\indicate{c}}{S^k\indicate{0}}^{1+2/k}.
+\end{align*}
+In either event, we conclude that $\iprod{V}{H}\le 
+\nparen{\frac{6\delta}{k^{\alpha_1}}}^{k/2}$.  This completes the proof.
+\end{proof}
+Note in \autoref{thm:klogk}, we use \autoref{thm:main} with a 
+simple and fixed $S$ 
+(i.e., the standard random walk on the Hamming cube), 
+but with complicated vectors $u,v$ that come from the particular 
+communication protocol whose communication cost we would like 
+to lower bound. By contrast, in \autoref{thm:paritysize} the 
+vectors $u,v$ are simple point masses on states $0$ and $c$ but 
+the matrix $S$ is a convolution random walk on the Hamming cube 
+that comes from the particular decision tree whose size we lower 
+bound.
+
+\subsection{Property testing}
+\label{sec:proptest}
+In the property testing model, given black box access to 
+an otherwise unknown function $f\colon\field^n_2\to\field_2$, 
+our goal is to tell apart whether $x\in P$ for some fixed set 
+of functions $P$ or $\lone{f-g}\ge \eps2^n$ for any $g\in P$. 
+Here, the black box queries are done by providing an input 
+$x\in\field_2^n$ to the function and observing $f(x)$.
+
+A function $f\colon\field_2^n\to\field_2$ is
+called $k$-linear if $f$ is given by
+\begin{align*}
+f(x) = \sum_{i\in S}x_i
+\end{align*} 
+for some $S\subseteq[n]$ of size at most $k$.
+By combining our communication complexity lower bound 
+\autoref{thm:klogk} with the reduction technique developed 
+in \cite{BlaisBM2012} or by combining
+our parity decision tree lower bound \autoref{thm:paritysize} 
+with a reduction given in \cite{BhrushundiCK2014}, one obtains 
+the following.
+
+\begingroup
+\def\thecorollary{\ref{cor:propertytest}}
+\begin{corollary}[restated]
+Any $\delta$-error property testing algorithm for 
+$k$-linearity with $\epsilon=1/2$ requires 
+$\Omega(k\log (k/\delta))$ queries.
+\end{corollary}
+\addtocounter{theorem}{-1}
+\endgroup
+In fact through this, one obtains similar lower bounds to
+property testing for $k$-juntas, $k$-term DNFs, size-$k$ formulas,
+size-$k$ decision trees, $k$-sparse $\field_2$-polynomials;
+see \cite{Blais2009, ChakrabortyGM2011}.
