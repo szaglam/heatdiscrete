@@ -1,0 +1,5 @@
+Changes in v2:
+- Corrected an erroneous BibTex entry for Täubig's book
+  'Matrix Inequalities for Iterative Systems'
+- Fixed various typos
+- Added grant information
