@@ -1,6 +1,6 @@
 [submodule "references"]
 	path = references
-	url = git@github.com:saglam/references
+	url = git@github.com:szaglam/references
 [submodule "definitions"]
 	path = definitions
-	url = git@github.com:saglam/definitions
+	url = git@github.com:szaglam/definitions
